@@ -74,7 +74,7 @@ export default class Home extends Component {
     // DataRepository.fetchNetRepository('https://www.pj.com/oauth/token',{
     //   device_token: 'fd970f02a47dfd26d73a1f5649d573fe4c6667bce8f4a422359a1e08296d9f0d',
     //   grant_type: 'password',
-    //   password: 'huwei75232694',
+    //   password: '',
     //   username: '18510725238',
     // },true).then(data => {
       // navigation.setParams({isNormal: true})
