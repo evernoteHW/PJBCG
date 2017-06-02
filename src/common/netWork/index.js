@@ -10,6 +10,7 @@ import {
     Alert,
 } from 'react-native';
 
+const baseUrl = 'https://www.pj.com'
 // var base64 = require('base-64');
 // var utf8 = require('utf8');
 
@@ -18,7 +19,7 @@ export default class DataRepository {
         // super(props)
         this.props = props;
     }
-    static fetchNetRepository(url,parms={},isLogin=false){
+    static fetchNetRepository(url,parms={},token=''){
 
       return new Promise((resolve,reject) => {
       
@@ -28,21 +29,61 @@ export default class DataRepository {
           }
           var parmsStr = `${bodyArray.join('&')}`
           var authorization_base64 = ''
-          if (isLogin) {
+          if (token == '') {
             // var bytes = utf8.encode("iOS:tcLMLiTokWOQGfEAGqry");
             // var encoded = base64.encode(bytes);
             authorization_base64 = `Basic aU9TOnRjTE1MaVRva1dPUUdmRUFHcXJ5`
           }else{
-            // authorization_base64 = `Basic ${Base64(authorization)}`
+            authorization_base64 = token
           }
+          //获取Toke
+          var fetch_url = `${baseUrl}/${url}`
 
-          fetch(url,{
+          fetch(fetch_url,{
             method:  "POST",
             headers: {
               'Authorization': authorization_base64,
               'Content-Type':  'application/x-www-form-urlencoded',
             },
             body: parmsStr,
+          }).then((response) => {
+            if (response.ok) {
+              return response.json()
+            }else if (response.status == 401) {
+              Alert.alert("Oops! You are not authorized.");
+            }else{
+              Alert.alert(`${response.status}`);
+            }
+          }).then((json)=>{
+            console.log(json);
+            resolve(json)
+          }).catch((error) =>{
+            reject(error)
+        })
+      }
+      )
+    }
+    static fetchNormalNetRepository(url,parms={},token=''){
+
+      return new Promise((resolve,reject) => {
+      
+          var bodyArray = ['referral=App Store']
+          var authorization_base64 = ''
+          if (token == '') {
+            authorization_base64 = `Basic aU9TOnRjTE1MaVRva1dPUUdmRUFHcXJ5`
+          }else{
+            authorization_base64 = token
+          }
+          //获取Toke
+          var fetch_url = `${baseUrl}/${url}`
+
+          fetch(fetch_url,{
+            method:  "POST",
+            headers: {
+              'Authorization': authorization_base64,
+              'Content-Type':  'application/json',
+            },
+            body: JSON.stringify(parms),
           }).then((response) => {
             if (response.ok) {
               return response.json()

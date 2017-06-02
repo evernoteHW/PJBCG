@@ -44,7 +44,7 @@ export default class NavigationBar extends Component {
 
     const { leftNormalImage, leftHighlightImage}   = this.props
     const { normalColor, highlightColor}           = this.props
-    console.log('.......');
+
     Animated.spring(
      this.state.color,
      {
@@ -61,6 +61,7 @@ export default class NavigationBar extends Component {
 
   }
   render() {
+    const { navigation }                           = this.props
     const { normalColor, highlightColor}           = this.props
     const { leftNormalImage, leftHighlightImage}   = this.props
     const { rightNormalImage, rightHighlightImage} = this.props
@@ -75,7 +76,7 @@ export default class NavigationBar extends Component {
                  (leftNormalImage || leftHighlightImage) ?
                     <TouchableOpacity 
                          style   = {styles.navigationBarItem} 
-                         onPress = {() => navigation.state.params.onSettingButtonPress()}
+                         onPress = {() => navigation.navigate('MessageCenter')}
                          >
                         <Image ref = {(component => this.leftImage = component)} source = {leftNormalImage}/>
                    </TouchableOpacity> : null
@@ -89,7 +90,7 @@ export default class NavigationBar extends Component {
                 (rightNormalImage || rightHighlightImage) ?
                 <TouchableOpacity 
                    style = {styles.navigationBarItem} 
-                   onPress={() => navigation.state.params.onSettingButtonPress()}
+                   onPress={() => navigation.navigate('MessageCenter')}
                  >
                  <Image ref = {(component => this.rightImage = component)} source = {rightNormalImage}/>
                 </TouchableOpacity> : null

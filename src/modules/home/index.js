@@ -17,6 +17,7 @@ import {
   Dimensions,
   Animated,
   DeviceEventEmitter,
+  AsyncStorage,
 } from 'react-native';
 
 
@@ -26,6 +27,7 @@ export const screenHeight = Dimensions.get('window').height
 import NavigationBar from '../../common/NavigationBar'
 import RootViewPage from './RootViewPage'
 import DataRepository from '../../common/netWork'
+import RecommondModel from '../../models/RecommendModel'
 
 export default class Home extends Component {
   constructor(props) {
@@ -37,7 +39,7 @@ export default class Home extends Component {
   static navigationOptions = ({navigation}) => {
       return {
           header: (<NavigationBar
-                    // ref              = 'aaaaaaa' 
+                    navigation          = {navigation}
                     leftNormalImage     = {require('../../images/home/home_left_icon_transparent.png')}
                     leftHighlightImage  = {require('../../images/home/home_left_icon_normal.png')}
                     rightNormalImage    = {require('../../images/home/home_right_icon_transparent.png')}
@@ -68,17 +70,38 @@ export default class Home extends Component {
       }
   }
   componentWillMount(){
-
+    // const { navigation } = this.props
+    // navigation.navigate('Login')
   }
   componentDidMount(){
-    // DataRepository.fetchNetRepository('https://www.pj.com/oauth/token',{
-    //   device_token: 'fd970f02a47dfd26d73a1f5649d573fe4c6667bce8f4a422359a1e08296d9f0d',
-    //   grant_type: 'password',
-    //   password: '',
-    //   username: '18510725238',
-    // },true).then(data => {
-      // navigation.setParams({isNormal: true})
-    // })      
+    //  this.notification = DeviceEventEmitter.addListener('LoginSuccess', (parms)=>{
+    //   //登陆成功
+    //   this.getHomeData(parms)
+    // });
+      this.getHomeData()
+  }
+  getHomeData(){
+    AsyncStorage.getItem('PJBLoginInfo').then((value) => {
+      let jsonValue = JSON.parse((value));
+      const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
+
+       DataRepository.fetchNormalNetRepository('rest/frontPage/v1.7/getBannerIndex',{
+        clientId: '4',
+      }).then(result => {
+          this.convertJSONToModel(result)
+      }) 
+    })
+  }
+  convertJSONToModel(result){
+    const { bannerMap,mediaReportMap,newComerProduct,recommendMap } = result.result
+    for (var i = 0; i < recommendMap.length; i++) {
+      var item = recommendMap[i]
+      var model = new RecommendModel(item)
+      console.log(item);
+    }
+  }
+  componentWillUnmount(){
+    this.notification.remove();
   }
   _onScroll(e){
     const {contentInset, contentOffset,contentSize,layoutMeasurement} = e.nativeEvent
@@ -140,7 +163,8 @@ export default class Home extends Component {
     )
   }
   _renderContentView(){
-    return <View style = {styles.contentView}>
+    const {navigation} = this.props
+    return <TouchableOpacity style = {styles.contentView} onPress = {()=> navigation.navigate('ChannelManagePage')}>
               <View style = {styles.contentTopLineView}/>
               <View style = {styles.contentPercentView}>
                 <Text style = {styles.contentPercentTextBg}>
@@ -157,7 +181,7 @@ export default class Home extends Component {
                 <Text style = {styles.contentTipText}>预期年化收益率</Text>
                 <Text style = {styles.contentTipText}>期限</Text>
               </View>
-           </View>
+           </TouchableOpacity>
   }
   _renderVipView(){
 

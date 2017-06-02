@@ -16,12 +16,16 @@ import {
   Modal,
   AsyncStorage,
   DeviceEventEmitter,
-
+  Dimensions,
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
 import Login from '../login'
 import ThemeTopic from '../../common/ThemeTopic'
+import DataRepository from '../../common/netWork'
+
+export const screenWidth = Dimensions.get('window').width
+export const screenHeight = Dimensions.get('window').height
 
 const navigateAction = NavigationActions.navigate({
   routeName: 'Setting',
@@ -35,172 +39,165 @@ export default class Mine extends Component {
     this.state = {
       userModel:    undefined,
       modalVisible: false,
-      listData:     [],
     }
   }
   static navigationOptions = ({navigation}) => {
       return {
-        header: null
+        headerTitle: '账户中心 存管版',
+        headerTintColor : 'white',//文字颜色
+        headerStyle: {backgroundColor: 'transparent', position: 'absolute',zIndex: 100,top: 0,left: 0,right: 0,}
       }
   }
   componentDidMount(){
-    // ThemeTopic.updateTheme()
-
-    this.setState({
-       listData:     [
-              {
-                data: [
-                        {
-                          title:    '主题切换',
-                          subTitle: '',
-                          url:      require('../../images/mine/mine_list_exchange.png'),
-                        },
-                        {
-                          title:    '动态',
-                          subTitle: '',
-                          url:      require('../../images/mine/mine_list_dynamic.png'),
-                        },
-                        {
-                          title:    '收藏',
-                          subTitle: '',
-                          url:      require('../../images/mine/mine_list_collect.png'),
-                        },
-                        {
-                          title:    '消息',
-                          subTitle: '',
-                          url:      require('../../images/mine/mine_list_message.png'),
-                        },
-                      ],
-                key: '0'
-              },
-              {
-                data: [
-                        {
-                          title:    '设置',
-                          subTitle: '',
-                          url:      require('../../images/mine/mine_list_setting.png'),
-                        }
-                      ],
-                key: '1',
-              },
-              {
-                data: [
-                        {
-                          title:    '意见反馈',
-                          subTitle: '',
-                          url:      require('../../images/mine/mine_list_feedback.png'),
-                        }
-                      ],
-                key: '2',
-              },
-        ],
-    })
+    //
+    //  DataRepository.fetchNetRepository('rest/userHome/v1.4/homeInit',{
+    // },true).then(data => {
+    //     //登陆成功 
+    // }) 
   }
-  _selectedIndex = (item,index) =>{
-    //更换主题
-    AsyncStorage.getItem('ThemeTopic').then((value) =>{
-      if (value === '88888') {
-        AsyncStorage.setItem('ThemeTopic','99999')
-      }else{
-        AsyncStorage.setItem('ThemeTopic','88888')
-      }
-      DeviceEventEmitter.emit('ThemeChanged');
-    })
-
-  }
-  renderItem = ({item, index}) =>{
-      return( 
-          <TouchableOpacity 
-            style   = {{backgroundColor: 'white', flexDirection: 'row', height: 50,alignItems: 'center'}}
-            onPress = {()=> this._selectedIndex(item,index)}
-          >
-            <Image 
-              source = {item.url} 
-              style  = {{width: 20, height: 20,marginLeft: 10}}
-            />
-            <Text style = {{marginLeft: 10, fontSize: 14}}>{item.title}</Text>
-            <Text style = {{marginLeft: 5, color: 'gray', fontSize: 12}}>{item.subTitle}</Text>
-          </TouchableOpacity>
-      )
-    }
-    _onPress(){
-      this.setState({modalVisible: true})
-    }
-    _cancel(){
-      this.setState({modalVisible: false})
-    }
-    _login(){
-     this.setState({modalVisible: false}) 
-    }
-    _listHeaderComponent = () =>{
-      return (<View>
-                <View style = {styles.headerTip}>
-                  <Image 
-                    style  = {styles.quotation}
-                    source = {require('../../images/mine/mine_list_head_quotation_left.png')}
-                  />
-                  <Text style = {styles.text}>一键登录 享受私人定制</Text>
-                  <Image 
-                    style  = {styles.quotation}
-                    source = {require('../../images/mine/mine_list_head_quotation_right.png')}
-                  />
-                </View>
-                <View style = {styles.headerItems}>
-                {
-                      [
-                         require('../../images/mine/mian_list_head_wechat.png'),
-                         require('../../images/mine/mian_list_head_qq.png'),
-                         require('../../images/mine/mian_list_head_phone.png')
-                      ].map((name,index) => {
-                        return <TouchableOpacity
-                                  onPress = {this._onPress.bind(this)}
-                                  key    = {index} 
-                               >
-                                  <Image 
-                                    source = {name}
-                                    style  = {{width: 60, height: 60}}
-                                 /> 
-                               </TouchableOpacity>
-                      })
-                }
-                  
-                </View>
-              </View>
-      )
-    }
-    _sectionSeparatorComponent = () =>{
-      return( <View style={{flex:1,height:10}} /> )
-    }
-    _itemSeparatorComponent = () =>{
-      return( <View style={{flex:1,height:1}} /> )
-    }
-    render() {
+  render() {
         const { navigate } = this.props.navigation;
         return (
-          <View style={styles.container}>
-            <SectionList 
-                style                     = {styles.sectionList}
-                sections                  = {this.state.listData}
-                renderItem                = {this.renderItem}
-                keyExtractor              = {(item,index) => `${index}`}
-                SectionSeparatorComponent = {this._sectionSeparatorComponent}
-                ItemSeparatorComponent    = {this._itemSeparatorComponent}
-                ListHeaderComponent       = {this._listHeaderComponent}
-                removeClippedSubviews     = {false}
-            />
-          <Modal
-            animationType  = {'slide'}
-            transparent    = {false}
-            visible        = {this.state.modalVisible}
-            onRequestClose = {() => {alert("Modal has been closed.")}}
-          >
-            <Login 
-              cancel = {this._cancel.bind(this)} 
-              login  = {this._login.bind(this)}
-            />
-          </Modal>
+          <View style = {styles.container}>
+            <ScrollView style = {styles.scrollView}>
+              <View style = {styles.containerView}>
+                <Image style = {styles.headerBg} source = {require('../../images/mine/mine_top_header_bg.png')}/>
+                <View style = {styles.header}>
+                  <View style = {styles.headerTop}>  
+                      <Image style = {styles.headerIcon} source = {require('../../images/mine/mine_top_default_icon.png')}/>
+                      <Text style = {styles.headerNickName}>昵称</Text>
+                      <TouchableOpacity style = {styles.headerTopRight}>
+                         <Image source = {require('../../images/mine/mine_header_top_setting.png')} style = {styles.headerTopRightIcon} /> 
+                         <Text style = {styles.headerTopRightText}>账户管理</Text>
+                         <Image source = {require('../../images/mine/mine_header_top_goto.png')} style = {styles.headerTopRightIcon} />
+                      </TouchableOpacity>
+                  </View>
+                  <View style = {styles.headerBottom}>  
+                      <View style = {styles.headerBottomItem}>
+                          <Text style = {styles.headerBottomItemText}>8452.00</Text>
+                          <Text style = {styles.headerBottomItemSubText}>总资产(元)</Text>
+                      </View>
+                      <View style = {styles.headerBottomSeperator} />
+                      <View style = {styles.headerBottomItem}>
+                          <Text style = {styles.headerBottomItemText}>8452.00</Text>
+                          <Text style = {styles.headerBottomItemSubText}>累计收益(元)</Text>
+                      </View>
+                      <View style = {styles.headerBottomSeperator} />
+                      <View style = {styles.headerBottomItem}>
+                          <Text style = {styles.headerBottomItemText}>8452.00</Text>
+                          <Text style = {styles.headerBottomItemSubText}>待收收益(元)</Text>
+                      </View>
+                  </View>
+                </View>
+                <View style = {styles.bottom}>
+                    <Text style = {styles.bottomItem1}>
+                        <Text style = {styles.bottomItem1LeftText}>可用余额：</Text>
+                        <Text style = {styles.bottomItem1RightText}>¥8450.00</Text>
+                    </Text>
+                    <View style = {styles.bottomItem2}>
+                        <TouchableOpacity style = {styles.bottomItem2TouchableOpacity}>
+                          <Image 
+                            source     = {require('../../images/mine/mine_bottom2_btn_bg.png')} 
+                            style      = {styles.bottomItem2Image}
+                            resizeMode = 'stretch'
+                          >
+                              <Text style = {styles.bottomItem2Text}>提现</Text>
+                          </Image>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.bottomItem2TouchableOpacity}>
+                          <Image 
+                            source     = {require('../../images/mine/mine_bottom2_btn_bg.png')} 
+                            style      = {styles.bottomItem2Image}
+                            resizeMode = 'stretch'
+                          >
+                              <Text style = {styles.bottomItem2Text}>充值</Text>
+                          </Image>
+                        </TouchableOpacity>
+                    </View>
+                    <Text style = {styles.bottomItem3}>我的投资</Text>
+                    <View style = {styles.bottomItem4}>
+                       
+                       <TouchableOpacity style = {styles.bottomItem4SubItemLeft}>
+                          <Image 
+                            source = {require('../../images/mine/mine_bottom4_ppb_icon.png')}
+                            style  = {styles.bottomItem4SubItemImage}
+                          />
+                          <View>
+                              <Text style = {styles.bottomItem4SubItemText}>4010.00</Text>
+                              <Text style = {styles.bottomItem4SubItemSubText}>票票宝资产(元)</Text>
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.bottomItem4SubItemRight}>
+                           <Image 
+                            source = {require('../../images/mine/mine_bottom4_wzb_icon.png')}
+                            style  = {styles.bottomItem4SubItemImage}
+                          />
+                          <View>
+                              <Text style = {styles.bottomItem4SubItemText}>4010.00</Text>
+                              <Text style = {styles.bottomItem4SubItemSubText}>玩赚宝资产(元)</Text>
+                          </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.bottomItem4SubItemLeft}>
+                           <Image 
+                            source = {require('../../images/mine/mine_bottom4_yzb_icon.png')}
+                            style  = {styles.bottomItem4SubItemImage}
+                           />
+                           <View>
+                              <Text style = {styles.bottomItem4SubItemText}>4010.00</Text>
+                              <Text style = {styles.bottomItem4SubItemSubText}>易转宝资产(元)</Text>
+                           </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.bottomItem4SubItemRight}>
+                           <Image 
+                            source = {require('../../images/mine/mine_bottom4_detail_icon.png')}
+                            style  = {styles.bottomItem4SubItemImage}
+                           />
+                           <View>
+                              <Text style = {styles.bottomItem4SubItemText}>4010.00</Text>
+                              <Text style = {styles.bottomItem4SubItemSubText}>交易明细资产(元)</Text>
+                           </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style = {styles.bottomItem5}>
+                        <TouchableOpacity style = {styles.bottomItem5SubItem}>
+                          <Image 
+                            source = {require('../../images/mine/mine_bottom5_coupon_icon.png')}
+                            style  = {styles.bottomItem5SubItemImage}
+                          />
+                          <Text style = {styles.bottomItem5SubItemText}>优惠券</Text>
+                        </TouchableOpacity>
+                         <TouchableOpacity style = {styles.bottomItem5SubItem}>
+                          <Image 
+                            source = {require('../../images/mine/mine_bottom5_ebank_icon.png')}
+                            style  = {styles.bottomItem5SubItemImage}
+                           />
+                           <Text style = {styles.bottomItem5SubItemText}>E账户</Text>
+                        </TouchableOpacity>
+                         <TouchableOpacity style = {styles.bottomItem5SubItem}>
+                            <Image 
+                              source = {require('../../images/mine/mine_bottom5_share_icon.png')}
+                              style  = {styles.bottomItem5SubItemImage}
+                             />
+                            <Text style = {styles.bottomItem5SubItemText}>有奖邀请</Text>
+                        </TouchableOpacity>
+                         <TouchableOpacity style = {styles.bottomItem5SubItem}>
+                          <Image 
+                            source = {require('../../images/mine/mine_bottom5_kefu_icon.png')}
+                            style  = {styles.bottomItem5SubItemImage}
+                           />
+                          <Text style = {styles.bottomItem5SubItemText}>在线客服</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style = {styles.bottomItem6}>
+                      <View style = {styles.bottomItem6SepertorLeft}/>
+                      <Image style = {styles.bankIcon} source = {require('../../images/home/huaxin_cg_bank_icon.png')}/>
+                      <Text style = {styles.bottomItem6Text}>资金由华兴银行存管</Text>
+                      <View style = {styles.bottomItem6SepertorRight}/>
+                    </View>
+                </View>
+              </View>
+            </ScrollView>
           </View>
-          
       )
   }
 }
@@ -211,90 +208,234 @@ const styles = StyleSheet.create({
     // flexDirection:  'row',
     backgroundColor: 'rgb(244,245,247)',
   },
-  sectionList:{
-    backgroundColor: 'rgb(244,245,247)', 
-    width: '100%',
+  scrollView:{
+    backgroundColor: 'white',
+    flex:            1,
   },
-  contentContainer: {
-    // position:           'absoulute',
-    // // width:              '100%',
-    // left : 0,
-    // right: 0,
-    // bottom: 0,
-    // top: 100,
-    // resizeMode:         'cover'
-    // paddingBottom:   49,
-    // height: screenHeight - 49 - 64,
-    // backgroundColor: 'red',
-  },
-  headerItems:{
-    marginLeft:     25,
-    marginRight:    25,
-    marginBottom:   20,
-    flexDirection:  'row',
-    justifyContent: 'space-around',
-  },
-  headerTip:{
-    flexDirection: 'row',
-    marginBottom:    30,
-    marginTop:       40,
-    justifyContent:  'center',
-    alignItems:      'center',
-    // backgroundColor: '#123456',
-  },
-  text: {
-    color: '#666666'
-  },
-  quotation:{
-    width:           21,
-    height:          21,
+  containerView:{
+    flex:            1,
+    // backgroundColor: 'white',
+    // backgroundColor: 'orange',
   },
   headerBg:{
-    // flex:       1,
-    // resizeMode: 'cover',
-    // alignSelf:  'auto',
-    // width:      '100%',
-    // height:     300,
-    // flex:       1,
-    width:           "100%",
-    height:          '100%',
-    backgroundColor: '#123456', 
+    height: 440/3.0
   },
   header:{
-    justifyContent:  'center', 
-    alignItems:      'center',
-    height:          200
+    position:        'absolute',
+    // flexDirection:   'row',
+    backgroundColor: 'white',
+    shadowColor:     '#3a3433',
+    shadowOffset:    {width: 0,height: 10},
+    shadowRadius:    10,
+    shadowOpacity:   0.15,
+    left:            10,
+    right:           10,
+    top:             84,
+    // height:          100,
+    borderRadius:    5,
   },
-  // headerIcon:{
-  //   left:         (screenWidth - 80)/2.0,
-  //   position:     'absolute', 
-  //   width:        80,
-  //   height:       80,
-  //   borderRadius: 40,
-  //   backgroundColor: '#123456',
-  // },
-  loginBtn: {
-    justifyContent: 'center', 
+  headerTop:{
+    marginLeft:    15,
+    marginTop:     15,
+    flexDirection: 'row',
+    alignItems:    'center',
+  },
+  headerTopRight:{
+    alignItems:    'center',
+    // right:      0,
+    marginRight:   10,
+    flexDirection: 'row'
+  },
+  headerTopRightText:{
+    marginLeft: 5,
+    color: '#8a8a8a'
+  },
+  headerTopRightIcon:{
+    width: 15,
+    height: 15,
+  },
+  headerIcon:{
+    width:           50,
+    height:          50,
+    borderRadius:    25,
+    // backgroundColor: 'orange',
+  },
+  headerNickName:{
+    flex:               1,
+    color:              '#333333',
+    marginLeft:         10,
+    fontSize:           16,
+    // backgroundColor: 'yellow',
+  },
+  headerBottom:{
+    marginBottom:   15,
+    marginTop:      10,
+    flexDirection:  'row',
     alignItems:     'center',
-    marginLeft:     7, 
-    height:         30 ,
-    width:          100, 
-    marginLeft:     10, 
-    borderWidth:    0.5,
-    borderColor:    '#999999'
+    justifyContent: 'center',
   },
-  registerBtn: {
-    justifyContent: 'center', 
-    alignItems:     'center',
-    marginRight:    10, 
-    height:         30 ,
-    width:          100, 
-    borderWidth:    0.5, 
-    borderColor:    '#999999'
+  headerBottomItem:{
+    flex: 3
   },
-  instructions: {
-    textAlign:    'center',
+  headerBottomSeperator:{
+    width:           1,
+    backgroundColor: 'rgb(247,246,242)',
+    height:          30,
+  },
+  headerBottomItemText:{
     color:        '#333333',
     marginBottom: 5,
+    textAlign:    'center',
+  },
+  headerBottomItemSubText:{
+    textAlign: 'center',
+    color:     '#666666'
+  },
+  bottom:{
+    marginLeft:    15,
+    // marginTop:     200,
+    marginRight: 15,
+    
+    // backgroundColor: 'white',
+    flex:            1,
+  },
+  bottomItem1:{
+    marginTop:     110,
+  },
+  bottomItem1LeftText:{
+    color:    '#333333',
+    fontSize: 14,
+  },
+  bottomItem1RightText:{
+    color: '#e94e4e',
+    fontSize: 27,
+    // fontWeight: 'bold',
+  },
+  bottomItem2:{
+    flex:           1,
+    marginTop:      5,
+    flexDirection:  'row',
+    justifyContent: 'space-between',
+  },
+  bottomItem2TouchableOpacity:{
+    flex:               2,
+    // marginRight:     10,
+    // backgroundColor: 'orange',
+    // height:          60,
+    alignItems:         'center',
+    justifyContent:     'center',
+  },
+  bottomItem2Image:{
+    flex:            1,
+    marginTop:       0,
+    marginLeft:      0,
+    marginRight:     0,
+    marginBottom:    0,
+    // backgroundColor: 'red',
+    width:        180,
+    height:       168/3.0,
+    alignItems:      'center',
+    justifyContent:  'center',
+  },
+  bottomItem2Text:{
+    backgroundColor: 'transparent',
+    color:           'white',
+    marginBottom:    5,
+    fontSize:        15,
+  },
+  bottomItem3:{
+    marginTop: 30,
+    color:     '#666666'
+  },
+  bottomItem4:{
+    marginTop:          10,
+    flexDirection:      'row',
+    flexWrap:           'wrap',
+    // backgroundColor: 'red'
+  },
+  bottomItem4SubItemLeft:{
+    width:           (screenWidth - 30 )/2.0,
+    backgroundColor: 'white',
+    // marginTop:       1,
+    // marginRight:     1,
+    flexDirection:   'row',
+    alignItems:      'center',
+  },
+  bottomItem4SubItemRight:{
+    width:           (screenWidth - 30 )/2.0,
+    backgroundColor: 'white',
+    // marginTop:    1,
+    // marginRight:  1,
+    flexDirection:   'row',
+    alignItems:      'center',
+  },
+  bottomItem4SubItemImage:{
+    marginTop: 10,
+    marginRight: 5,
+    marginBottom: 10,
+    width:  130/3.0,
+    height: 130/3.0,
+  },
+  bottomItem4SubItemText:{
+    color:    '#333333',
+    fontSize: 16,
+  },
+  bottomItem4SubItemSubText:{
+    color:     '#666666',
+    fontSize:  12,
+    marginTop: 2,
+  },
+  bottomItem5:{
+    flexDirection:   'row',
+    marginTop:       10,
+    backgroundColor: 'white',
+    shadowColor:     '#3a3433',
+    shadowOffset:    {width: 0,height: 10},
+    shadowRadius:    10,
+    shadowOpacity:   0.15,
+    // left:         10,
+    // right:        10,
+    // top:          84,
+    // height:       100,
+    borderRadius:    5,
+  },
+  bottomItem5SubItem:{
+    flex:           4,
+    alignItems:     'center',
+    justifyContent: 'center',
+  },
+  bottomItem5SubItemImage:{
+    marginTop: 15,
+    marginRight: 5,
+    marginBottom: 10,
+    width:  102/3.0,
+    height: 65/3.0,
+  },
+  bottomItem5SubItemText:{
+    color: '#666666',
+    marginBottom: 13,
+  },
+  bottomItem6:{
+    marginTop:      30,
+    marginBottom:   30,
+    flexDirection:  'row',
+    alignItems:     'center',
+    justifyContent: 'center',
+  },
+  bottomItem6Text:{
+    color:      '#333333',
+    marginLeft: 5,
+  },
+  bottomItem6SepertorLeft:{
+    flex: 4,
+    backgroundColor: 'rgb(242,238,235)',
+    height: 0.5,
+    marginRight: 5,
+  },
+   bottomItem6SepertorRight:{
+    flex:            4,
+    backgroundColor: 'rgb(242,238,235)',
+    height:          0.5,
+    marginLeft:      5,
   },
 });

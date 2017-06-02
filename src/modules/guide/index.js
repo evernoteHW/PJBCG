@@ -17,6 +17,7 @@ import {
   Dimensions,
   Animated,
   DeviceEventEmitter,
+  AsyncStorage,
 } from 'react-native';
 
 
@@ -37,6 +38,11 @@ export default class Guide extends Component {
 
   }
   componentDidMount(){     
+    AsyncStorage.setItem('APPGuideInstalled',JSON.stringify('TRUE'),(error,result) =>{
+      if (!error) {
+        // Alert.alert('成功保存')
+      }
+    })
   }
   _onScroll(e){
     const {contentInset, contentOffset,contentSize,layoutMeasurement} = e.nativeEvent
@@ -99,7 +105,8 @@ export default class Guide extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    position: 'absolute',
     // justifyContent: 'center',
     // alignItems: 'center',
     // backgroundColor: 'rgb(247,247,242)',
@@ -132,14 +139,14 @@ const styles = StyleSheet.create({
     // marginTop:    0,
     // marginBottom: 20,
     marginRight:     16,
-    backgroundColor: 'yellow',
+    // backgroundColor: 'yellow',
     height:          43,
     // textAlign:    'center',
   },
   goLook:{
     width:           134,
     marginLeft:      16,
-    backgroundColor: 'red',
+    // backgroundColor: 'red',
     height:          43,
     // textAlign:    'center',
     // marginTop:    20,

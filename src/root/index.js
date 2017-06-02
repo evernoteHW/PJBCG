@@ -12,6 +12,8 @@ import {
   View,
   Image,
   DeviceEventEmitter,
+  AsyncStorage,
+  Alert,
 } from 'react-native';
 
 import { StackNavigator , TabNavigator} from 'react-navigation';
@@ -25,6 +27,8 @@ import ChannelManagePage from '../modules/home/RootViewPage/Pages/ChannelManageP
 import MoreChannelCityPage from '../modules/home/RootViewPage/Pages/MoreChannelCityPage'
 import AttentionTagPage from '../modules/attention/AttentionTagPage'
 import Guide from '../modules/guide'
+import Login from '../modules/login'
+import MessageCenter from '../modules/messageCenter'
 
 const RouteConfigs = 
 {
@@ -33,36 +37,34 @@ const RouteConfigs =
       ,
       navigationOptions: {
         tabBarLabel: '首页',
-        tabBarIcon: ({focused,tintColor}) => (
+        tabBarIcon: ({focused,tintColor}) =>  
           <Image 
             source = {focused ? require('../images/tab/scr_root_home_selected.png'): require('../images/tab/scr_root_home_normal.png')}
-            style  = {{height:21 ,width: 21}}
+            style  = {{height:20 ,width: 20}}
           />
-        )
+        
       },
     },
     Finance: {
       screen:            Finance,
       navigationOptions: {
         tabBarLabel: '理财',
-        tabBarIcon: ({focused,tintColor}) => (
+        tabBarIcon: ({focused,tintColor}) => 
           <Image 
             source = {focused ? require('../images/tab/scr_root_finance_selected.png'): require('../images/tab/scr_root_finance_normal.png')}
-            style  = {{height:21 ,width: 21}}
+            style  = {{height:20 ,width: 20}}
           />
-        )
       }
     },
     Mine: {
       screen:            Mine,
       navigationOptions: {
         tabBarLabel: '我的',
-        tabBarIcon: ({focused,tintColor}) => (
+        tabBarIcon: ({focused,tintColor}) => 
           <Image 
             source = {focused ? require('../images/tab/scr_root_mine_selected.png'): require('../images/tab/scr_root_mine_normal.png')}
-            style  = {{height:21 ,width: 21}}
+            style  = {{height:20 ,width: 20}}
           />
-        )
       }
     },
 }
@@ -101,39 +103,57 @@ const TabNavigatorConfig = {
 const TabBars = TabNavigator(RouteConfigs,TabNavigatorConfig)
 
 const App = StackNavigator({
-    TabBars:             { screen: TabBars },
-    WebViewPage:         { screen: WebViewPage },
-    AttentionTagPage:    { screen: AttentionTagPage },
-    ChannelManagePage:   { screen: ChannelManagePage},
-    MoreChannelCityPage: { screen: MoreChannelCityPage},
+    TabBars:                { screen: TabBars },
+    MessageCenter:          { screen: MessageCenter },
+    // AttentionTagPage:    { screen: AttentionTagPage },
+    ChannelManagePage:      { screen: ChannelManagePage},
+    // MoreChannelCityPage: { screen: MoreChannelCityPage},
 },{
     headerMode:           'screen' ,
-    mode:                 'card',
+    mode:                 'none',
+
+});
+const ModalApp = StackNavigator({
+    MainCardNavigator: { screen: App },
+    Login:             {screen: Login}
+},{
+    headerMode:           'none' ,
+    mode:                 'modal',
 
 });
 
 export default class PJBCG extends Component {
   constructor(props) {
     super(props);
-    this.state = { installed:    false}
+    this.state = { installed:    true}
   }
   //启动页面。。。。
-  componentDidMount(){
+ 
+  componentDidMount() {
     
+  }
+  _loadInitialState = async () => {
+    try {
+      var value = await AsyncStorage.getItem('APPGuideInstalled');
+      if (value !== null){
+          this.setState({installed: true})
+      } else {
+      }
+    } catch (error) {
+    }
   }
   componentWillUnmount(){
     this.notification.remove();
   }
-
+  
   render() {
-    if (this.state.installed) {
-      return (
-        <App screenProps={{ta:''}}/>
-      );
-   }else{
-    return (
-        <Guide register={()=> this.setState({installed: true})} goLook={()=> this.setState({installed: true})}/>
-      );
-   }
+    // this._loadInitialState().done();
+    return this.state.installed 
+    ? 
+    <ModalApp screenProps={{ta:''}}/> 
+    : 
+     <Guide register={()=> {}} goLook={()=> { this.setState({installed: true})}} 
+     />
+  
   }
 }
