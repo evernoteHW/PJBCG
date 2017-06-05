@@ -27,7 +27,15 @@ export const screenHeight = Dimensions.get('window').height
 import NavigationBar from '../../common/NavigationBar'
 import RootViewPage from './RootViewPage'
 import DataRepository from '../../common/netWork'
-import RecommondModel from '../../models/RecommendModel'
+import RecommendModel from '../../models/RecommendModel'
+
+import { NavigationActions } from 'react-navigation'
+
+const navigateAction = NavigationActions.navigate({
+  routeName: 'Setting',
+  params:    {},
+  action: NavigationActions.navigate({ routeName: 'Setting'})
+})
 
 export default class Home extends Component {
   constructor(props) {
@@ -70,27 +78,28 @@ export default class Home extends Component {
       }
   }
   componentWillMount(){
-    // const { navigation } = this.props
-    // navigation.navigate('Login')
+    
   }
   componentDidMount(){
-    //  this.notification = DeviceEventEmitter.addListener('LoginSuccess', (parms)=>{
-    //   //登陆成功
-    //   this.getHomeData(parms)
-    // });
+     this.notification = DeviceEventEmitter.addListener('GoToLogin', (parms)=>{
+      //登陆成功
+        const { navigation } = this.props
+        navigation.navigate('Login')
+        // this.getHomeData(parms)
+    });
       this.getHomeData()
   }
   getHomeData(){
-    AsyncStorage.getItem('PJBLoginInfo').then((value) => {
-      let jsonValue = JSON.parse((value));
-      const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
+    // AsyncStorage.getItem('PJBLoginInfo').then((value) => {
+    //   let jsonValue = JSON.parse((value));
+    //   const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
 
-       DataRepository.fetchNormalNetRepository('rest/frontPage/v1.7/getBannerIndex',{
-        clientId: '4',
-      }).then(result => {
-          this.convertJSONToModel(result)
-      }) 
-    })
+    //    DataRepository.fetchNormalNetRepository('rest/frontPage/v1.7/getBannerIndex',{
+    //     clientId: '4',
+    //   }).then(result => {
+    //       this.convertJSONToModel(result)
+    //   }) 
+    // })
   }
   convertJSONToModel(result){
     const { bannerMap,mediaReportMap,newComerProduct,recommendMap } = result.result
@@ -114,7 +123,10 @@ export default class Home extends Component {
   }
   _renderHeaderView(){
     return (  <View style = {styles.header}>
-                <Image source = {require('../../images/home/homeplacor1242X882.jpg')} style = {styles.headerImageBg}/>
+                <Image 
+                  source = {require('../../images/home/homeplacor1242X882.jpg')} 
+                  style = {styles.headerImageBg}
+                />
                 <View style = {styles.headerAdView}>
                   {
                     [{title: '品牌介绍', subTitle: '专注票据10余年',url: require('../../images/home/home_security_icon.png')},

@@ -17,13 +17,14 @@ import {
 } from 'react-native';
 
 import VideoRootViewPage from './VideoRootViewPage'
-
+import DataRepository from '../../common/netWork'
 
 export default class Finance extends Component {
   constructor(props) {
     super(props);
   
     this.state = {
+      investProductMap: [],
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -47,15 +48,16 @@ export default class Finance extends Component {
 
   }
   componentDidMount(){
-    // DataRepository.fetchNetRepository('oauth/token',{
-    //   device_token: 'fd970f02a47dfd26d73a1f5649d573fe4c6667bce8f4a422359a1e08296d9f0d',
-    //   grant_type: 'password',
-    //   password: '',
-    //   username: '18510725238',
-    // },true).then(data => {
-    //     //登陆成功
-        
-    // })      
+    DataRepository.fetchNormalNetRepository('rest/frontPage/v1.2/getFinance',{
+      clientId: '4',
+      imei:     '1111',
+    }).then(data => {
+        this.convertJSONToModel(data)
+    })      
+  }
+  convertJSONToModel(data){
+    // investProductMap
+    this.setState({investProductMap: data.result.investProductMap})
   }
   _onScroll(e){
    
@@ -80,56 +82,120 @@ export default class Finance extends Component {
               </View>
     )
   }
-  _renderSingleView(){
-    return ( <View>
+  _renderSingleView(item,index){
+    return ( <View key = {index}>
                 <View style = {styles.whiteBg} />
-                <View style = {styles.recommond}>
-                  <Image style = {styles.recommondImage} source = {require('../../images/home/recommond_btn_bg.png')}>
-                    <Text style = {styles.recommondText}>为你推荐</Text>
-                  </Image>
-                </View>
-                <View style = {styles.contentTopView}>
-                  <Image style = {styles.contentTopViewImage} source = {require('../../images/home/home_content_head_ppb_icon.png')}/>
-                  <Text style = {styles.contentTopViewTextTitle}>票票宝</Text>
-                  <View style = {styles.contentTopViewLine}/>
-                  <Text style = {styles.contentTopViewTextSubTitle}>定期理财</Text>
-                  <View style = {styles.contentTopViewTextBg}>
-                    <Text style = {styles.contentTopViewTextTag}>加息券</Text>
-                  </View>
-                  <View style = {styles.contentTopViewTextBg}>
-                    <Text style = {styles.contentTopViewTextTag}>加息券</Text>
-                  </View>
-                  <View style = {styles.bankIconView}>
-                    <Image style = {styles.bankIcon} source = {require('../../images/home/huaxin_cg_bank_icon.png')}/>
-                    <Text style = {styles.bankInfoText}>华兴银行存管</Text>
-                  </View>
-                 
-                </View> 
-                { this._renderContentView() }
-                { this._renderContentView() }
+                  <View style = {styles.contentTopView}>
+                    <Image style = {styles.contentTopViewImage} source = {require('../../images/home/home_content_head_ppb_icon.png')}/>
+                    <Text style = {styles.contentTopViewTextTitle}>{item.productName}</Text>
+                    <View style = {styles.contentTopViewLine}/>
+                    <Text style = {styles.contentTopViewTextSubTitle}>{item.productTypeName}</Text>
+                    {
+                      (item.tag1 != undefined && item.tag1.length>0) ?  <View style = {styles.contentTopViewTextBg}>
+                          <Text style = {styles.contentTopViewTextTag}>{item.tag1}</Text>
+                        </View> : null
+                    }
+                    {
+                    (item.tag2 != undefined && item.tag2.length>0) ? <View style = {styles.contentTopViewTextBg}>
+                      <Text style = {styles.contentTopViewTextTag}>{item.tag2}</Text>
+                    </View>: null
+                    } 
+                    <View style = {styles.bankIconView}>
+                      <Image style = {styles.bankIcon} source = {require('../../images/home/huaxin_cg_bank_icon.png')}/>
+                      <Text style = {styles.bankInfoText}>华兴银行存管</Text>
+                    </View>
+                   
+                  </View> 
+                  { this._renderContentView(item) }
              </View>
     )
   }
-  _renderContentView(){
-    const {navigation} = this.props
-    return <TouchableOpacity style = {styles.contentView} onPress = {()=> navigation.navigate('ChannelManagePage')}>
-              <View style = {styles.contentTopLineView}/>
-              <View style = {styles.contentPercentView}>
-                <Text style = {styles.contentPercentTextBg}>
-                  <Text style = {styles.contentPercentText}>6.3%</Text>
-                  <Text style = {styles.contentPercentText1}>~8.8%</Text>
-                </Text>
-                <Text style = {styles.contentPercentTextBg}>
-                  <Text style = {styles.contentPercentText}>6.3%</Text>
-                  <Text style = {styles.contentPercentText1}>~8.8%</Text>
-                </Text>
-              </View>
-              <View style = {styles.contentCenterLine}/>
-              <View style = {styles.contentTipViewBg}>
-                <Text style = {styles.contentTipText}>预期年化收益率</Text>
-                <Text style = {styles.contentTipText}>期限</Text>
-              </View>
-           </TouchableOpacity>
+  _renderContentView(item){
+    switch(item.productTypeId){
+      case "5":{
+        return this._renderNewUser(item)
+      }
+      case "1":{
+        return this._renderTTB(item)
+      }
+      case "2":{
+        return this._renderTTBAdd(item)
+      }
+      case "3":{
+        return this._renderPPB(item)
+      }
+      case "7":{
+        return this._renderWZB(item)
+      }
+      default: 
+        return this._renderProductView(1,2,3)
+      break 
+    }
+  }
+  _renderNewUser(item){
+    var list = []
+    for (var i = 0; i < item.productItem.length; i++) {
+        var subItem = item.productItem[i]
+        let leftStr = `${subItem.yearProfit}%`
+        let centerStr = `${subItem.deadline}天`
+        let rightStr = `${subItem.yearProfit}%`
+        list.push(this._renderProductView(leftStr,centerStr,rightStr,i))
+    }
+    return list
+  }
+  _renderTTB(item){
+    let leftStr = `${item.productAnnualRate}%`
+    let centerStr = `随存随取`
+    let rightStr = `''`
+    return this._renderProductView(leftStr,centerStr,rightStr)
+  }
+  _renderTTBAdd(item){
+    let leftStr = `${item.productAnnualRate}%`
+    let centerStr = `${item.lockUpPeriodDesc}锁定期后`
+    let rightStr = `''`
+    return this._renderProductView(leftStr,centerStr,rightStr)
+  }
+  _renderPPB(item){
+    var list = []
+    for (var i = 0; i < item.productItem.length; i++) {
+        var subItem = item.productItem[i]
+        let leftStr = `${subItem.yearProfit}%`
+        let centerStr = `${subItem.deadline}天`
+        let rightStr = `${subItem.yearProfit}%`
+        list.push(this._renderProductView(leftStr,centerStr,rightStr,i))
+    }
+    return list
+  }
+  _renderWZB(item){
+    let leftStr = `${item.minAnnualRate}%~${item.maxAnnualRate}%`
+    let centerStr = `${item.deadlineMin}~${item.deadlineMax}天`
+    let rightStr = `''`
+    return this._renderProductView(leftStr,centerStr,rightStr)
+  }
+  _renderProductView(leftStr,centerStr,rightStr,key){
+   const {navigation} = this.props
+   return <TouchableOpacity style = {styles.contentView} onPress = {()=> navigation.navigate('ChannelManagePage')} key = {key}>
+                <View style = {styles.contentTopLineView}/>
+                    <View style = {styles.contentPercentView}>
+                      <View style = {{flex: 3,justifyContent: 'center',alignItems: 'center'}}>
+                          <Text style = {styles.contentPercentText}>{leftStr}</Text>
+                          <Text style = {styles.contentTipText}>预期年化收益率</Text>
+                      </View>
+                      <View style = {styles.contentCenterLine}/>
+                      <View style = {{flex: 3,justifyContent: 'center',alignItems: 'center'}}>
+                          <Text style = {styles.contentPercentText}>{centerStr}</Text>
+                          <Text style = {styles.contentTipText}>期限</Text>
+                      </View>
+                      <View style = {styles.contentCenterLine}/>
+                      <View style = {{flex: 3,justifyContent: 'center',alignItems: 'center'}}>
+                        <TouchableOpacity>
+                          <Image style = {styles.recommondImage} source = {require('../../images/home/recommond_btn_bg.png')}>
+                            <Text style = {styles.recommondText}>为你推荐</Text>
+                          </Image>
+                        </TouchableOpacity>    
+                      </View>
+                   </View>
+          </TouchableOpacity>
   }
   _renderVipView(){
 
@@ -144,10 +210,11 @@ export default class Finance extends Component {
         onScroll            = {this._onScroll.bind(this)}
         >
           <View style = {styles.scrollViewContainer}>
-          { this._renderHeaderView() }
-          { this._renderSingleView() }
-          { this._renderSingleView() }
-          { this._renderSingleView() }
+          {
+            this.state.investProductMap.map((item,index) =>{
+              return this._renderSingleView(item,index)
+            })
+          }
         </View>
         </ScrollView>
       </View>
@@ -244,7 +311,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     left:            10,
     right:           10,
-    top:             20,
+    top:             10,
     bottom:          10,
     borderRadius:    5,
     shadowColor:     '#3a3433',
@@ -267,13 +334,12 @@ const styles = StyleSheet.create({
     color:        'white',
   },
   contentTopView:{
-    marginLeft:         10,
-    marginRight:        10,
-    flexDirection:      'row',
-    marginTop:          5,
-    marginBottom:       20,
-    alignItems:         'center',
-    alignItems:         'center',
+    marginLeft:    10,
+    marginRight:   10,
+    flexDirection: 'row',
+    marginTop:     30,
+    marginBottom:  20,
+    alignItems:    'center',
   },
   contentTopViewImage:{
     width:      16,
@@ -329,30 +395,33 @@ const styles = StyleSheet.create({
     height:          1,
   },
   contentCenterLine:{
-    position:        'absolute',
+    // position:        'absolute',
     backgroundColor: 'rgb(241,239,235)',
-    width:           1,
+    width:           0.5,
     height:          50,
-    bottom:          30,
-    alignSelf:       'center',
+    // bottom:          30,
+    // alignSelf:       'center',
   },
   contentView:{
     // flexDirection: 'row',
-    // 
   },
   contentPercentView:{
     flexDirection: 'row',
-    marginTop:     20,
+    marginTop:     15,
+    marginLeft:    10,
+    marginRight:   10,
+    marginBottom:  25,
   },
   contentPercentTextBg:{
     alignItems:     'center',
     justifyContent: 'center',
-    flex:           2,
+    flex:           3,
     textAlign:      'center',
   },
   contentPercentText:{
-    color:    '#e94d4e',
-    fontSize: 20,
+    color:        '#e94d4e',
+    fontSize:     20,
+    marginBottom: 10,
   },
   contentPercentText1:{
     color:    '#e94d4e',
@@ -364,7 +433,7 @@ const styles = StyleSheet.create({
     marginBottom : 30,
   },
   contentTipText:{
-    flex:      2,
+    flex:      3,
     textAlign: 'center',
     color:     '#6d6261',
   },
@@ -377,5 +446,16 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+   recommondImage:{
+    width:          104,
+    height:         48,
+    justifyContent: 'center',
+    alignItems:     'center',
+  },
+  recommondText:{
+    marginRight:  6,
+    marginBottom: 6,
+    color:        'white',
   },
 });

@@ -8,6 +8,7 @@
 import {
     AsyncStorage,
     Alert,
+    DeviceEventEmitter,
 } from 'react-native';
 
 const baseUrl = 'https://www.pj.com'
@@ -88,9 +89,8 @@ export default class DataRepository {
             if (response.ok) {
               return response.json()
             }else if (response.status == 401) {
-              Alert.alert("Oops! You are not authorized.");
-            }else{
-              Alert.alert(`${response.status}`);
+              //去登陆吧
+              DeviceEventEmitter.emit('GoToLogin')
             }
           }).then((json)=>{
             console.log(json);

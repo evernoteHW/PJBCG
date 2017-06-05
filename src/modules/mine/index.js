@@ -17,6 +17,7 @@ import {
   AsyncStorage,
   DeviceEventEmitter,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -29,7 +30,7 @@ export const screenHeight = Dimensions.get('window').height
 
 const navigateAction = NavigationActions.navigate({
   routeName: 'Setting',
-  params:    {},
+  params:    {headerUrl : 'https://www.pj.com/img/upload/touxiang/201706051710342287.jpg'},
   action:    NavigationActions.navigate({ routeName: 'Setting'})
 })
 
@@ -37,15 +38,15 @@ export default class Mine extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userModel:    undefined,
+      userData:    '',
       modalVisible: false,
     }
   }
   static navigationOptions = ({navigation}) => {
       return {
-        headerTitle: '账户中心 存管版',
-        headerTintColor : 'white',//文字颜色
-        headerStyle: {backgroundColor: 'transparent', position: 'absolute',zIndex: 100,top: 0,left: 0,right: 0,}
+        headerTitle:     '账户中心 存管版',
+        headerTintColor: 'white',//文字颜色
+        headerStyle:     {backgroundColor: 'transparent', position: 'absolute',zIndex: 100,top: 0,left: 0,right: 0,}
       }
   }
   componentDidMount(){
@@ -54,19 +55,44 @@ export default class Mine extends Component {
     // },true).then(data => {
     //     //登陆成功 
     // }) 
+    this.getHomeData()
+  }
+  getHomeData(){
+    AsyncStorage.getItem('PJBLoginInfo').then((value) => {
+      let jsonValue = JSON.parse((value));
+      const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
+      console.log(`access_token = ${access_token} expires_in = ${expires_in} refresh_token = ${refresh_token} scope = ${scope} token_type=${token_type}`);
+       DataRepository.fetchNormalNetRepository('rest/userHome/v1.4/homeInit',{
+      },`${token_type} ${access_token}`).then(data => {
+          this.setState({userData: data.result})
+      }) 
+    })
   }
   render() {
         const { navigate } = this.props.navigation;
         return (
           <View style = {styles.container}>
+           <StatusBar barStyle="light-content" />
             <ScrollView style = {styles.scrollView}>
               <View style = {styles.containerView}>
-                <Image style = {styles.headerBg} source = {require('../../images/mine/mine_top_header_bg.png')}/>
+                <Image 
+                  style = {styles.headerBg} 
+                  source = {require('../../images/mine/mine_top_header_bg.png')}
+                />
                 <View style = {styles.header}>
                   <View style = {styles.headerTop}>  
-                      <Image style = {styles.headerIcon} source = {require('../../images/mine/mine_top_default_icon.png')}/>
-                      <Text style = {styles.headerNickName}>昵称</Text>
-                      <TouchableOpacity style = {styles.headerTopRight}>
+                      <Image 
+                        style = {styles.headerIcon} 
+                        // source = {require('../../images/mine/mine_top_default_icon.png')}
+                        source = {{url: this.state.userData.personalHead}}
+                      />
+                      <Text style = {styles.headerNickName}>{this.state.userData.realName}</Text>
+                          <TouchableOpacity 
+                              style   = {styles.headerTopRight} 
+                              onPress = {()=>{
+                                  this.props.navigation.dispatch(navigateAction)
+                              }}
+                          >
                          <Image source = {require('../../images/mine/mine_header_top_setting.png')} style = {styles.headerTopRightIcon} /> 
                          <Text style = {styles.headerTopRightText}>账户管理</Text>
                          <Image source = {require('../../images/mine/mine_header_top_goto.png')} style = {styles.headerTopRightIcon} />
@@ -74,17 +100,17 @@ export default class Mine extends Component {
                   </View>
                   <View style = {styles.headerBottom}>  
                       <View style = {styles.headerBottomItem}>
-                          <Text style = {styles.headerBottomItemText}>8452.00</Text>
+                          <Text style = {styles.headerBottomItemText}>{this.state.userData.accountSum}</Text>
                           <Text style = {styles.headerBottomItemSubText}>总资产(元)</Text>
                       </View>
                       <View style = {styles.headerBottomSeperator} />
                       <View style = {styles.headerBottomItem}>
-                          <Text style = {styles.headerBottomItemText}>8452.00</Text>
+                          <Text style = {styles.headerBottomItemText}>{this.state.userData.hasPayInterest}</Text>
                           <Text style = {styles.headerBottomItemSubText}>累计收益(元)</Text>
                       </View>
                       <View style = {styles.headerBottomSeperator} />
                       <View style = {styles.headerBottomItem}>
-                          <Text style = {styles.headerBottomItemText}>8452.00</Text>
+                          <Text style = {styles.headerBottomItemText}>{this.state.userData.dueinSum}</Text>
                           <Text style = {styles.headerBottomItemSubText}>待收收益(元)</Text>
                       </View>
                   </View>
@@ -123,7 +149,7 @@ export default class Mine extends Component {
                             style  = {styles.bottomItem4SubItemImage}
                           />
                           <View>
-                              <Text style = {styles.bottomItem4SubItemText}>4010.00</Text>
+                              <Text style = {styles.bottomItem4SubItemText}>{this.state.userData.ttbPlusAmount}</Text>
                               <Text style = {styles.bottomItem4SubItemSubText}>票票宝资产(元)</Text>
                           </View>
                         </TouchableOpacity>
@@ -133,7 +159,7 @@ export default class Mine extends Component {
                             style  = {styles.bottomItem4SubItemImage}
                           />
                           <View>
-                              <Text style = {styles.bottomItem4SubItemText}>4010.00</Text>
+                              <Text style = {styles.bottomItem4SubItemText}>{this.state.userData.ttbPlusAmount}</Text>
                               <Text style = {styles.bottomItem4SubItemSubText}>玩赚宝资产(元)</Text>
                           </View>
                         </TouchableOpacity>
@@ -143,7 +169,7 @@ export default class Mine extends Component {
                             style  = {styles.bottomItem4SubItemImage}
                            />
                            <View>
-                              <Text style = {styles.bottomItem4SubItemText}>4010.00</Text>
+                              <Text style = {styles.bottomItem4SubItemText}>{this.state.userData.forPaySum}</Text>
                               <Text style = {styles.bottomItem4SubItemSubText}>易转宝资产(元)</Text>
                            </View>
                         </TouchableOpacity>
@@ -153,7 +179,27 @@ export default class Mine extends Component {
                             style  = {styles.bottomItem4SubItemImage}
                            />
                            <View>
-                              <Text style = {styles.bottomItem4SubItemText}>4010.00</Text>
+                              <Text style = {styles.bottomItem4SubItemText}>{this.state.userData.ttbPlusAmount}</Text>
+                              <Text style = {styles.bottomItem4SubItemSubText}>交易明细资产(元)</Text>
+                           </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.bottomItem4SubItemRight}>
+                           <Image 
+                            source = {require('../../images/mine/mine_bottom4_detail_icon.png')}
+                            style  = {styles.bottomItem4SubItemImage}
+                           />
+                           <View>
+                              <Text style = {styles.bottomItem4SubItemText}>{this.state.userData.ttbPlusAmount}</Text>
+                              <Text style = {styles.bottomItem4SubItemSubText}>交易明细资产(元)</Text>
+                           </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style = {styles.bottomItem4SubItemRight}>
+                           <Image 
+                            source = {require('../../images/mine/mine_bottom4_detail_icon.png')}
+                            style  = {styles.bottomItem4SubItemImage}
+                           />
+                           <View>
+                              <Text style = {styles.bottomItem4SubItemText}>{this.state.userData.ttbPlusAmount}</Text>
                               <Text style = {styles.bottomItem4SubItemSubText}>交易明细资产(元)</Text>
                            </View>
                         </TouchableOpacity>
@@ -173,20 +219,21 @@ export default class Mine extends Component {
                            />
                            <Text style = {styles.bottomItem5SubItemText}>E账户</Text>
                         </TouchableOpacity>
-                         <TouchableOpacity style = {styles.bottomItem5SubItem}>
+                        <TouchableOpacity style = {styles.bottomItem5SubItem}>
                             <Image 
                               source = {require('../../images/mine/mine_bottom5_share_icon.png')}
                               style  = {styles.bottomItem5SubItemImage}
                              />
                             <Text style = {styles.bottomItem5SubItemText}>有奖邀请</Text>
                         </TouchableOpacity>
-                         <TouchableOpacity style = {styles.bottomItem5SubItem}>
+                        <TouchableOpacity style = {styles.bottomItem5SubItem}>
                           <Image 
                             source = {require('../../images/mine/mine_bottom5_kefu_icon.png')}
                             style  = {styles.bottomItem5SubItemImage}
                            />
                           <Text style = {styles.bottomItem5SubItemText}>在线客服</Text>
                         </TouchableOpacity>
+
                     </View>
                     <View style = {styles.bottomItem6}>
                       <View style = {styles.bottomItem6SepertorLeft}/>

@@ -29,6 +29,7 @@ import AttentionTagPage from '../modules/attention/AttentionTagPage'
 import Guide from '../modules/guide'
 import Login from '../modules/login'
 import MessageCenter from '../modules/messageCenter'
+import Setting from '../modules/settings'
 
 const RouteConfigs = 
 {
@@ -97,6 +98,9 @@ const TabNavigatorConfig = {
       },
       // pressOpacity: 1,
     },
+    navigationOptions:{
+      headerTintColor: 'blue',
+    }
   
 };
 
@@ -108,6 +112,7 @@ const App = StackNavigator({
     // AttentionTagPage:    { screen: AttentionTagPage },
     ChannelManagePage:      { screen: ChannelManagePage},
     // MoreChannelCityPage: { screen: MoreChannelCityPage},
+    Setting:                {screen: Setting},
 },{
     headerMode:           'screen' ,
     mode:                 'none',
