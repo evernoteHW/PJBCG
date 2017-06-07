@@ -22,6 +22,7 @@ import {
   ActionSheetIOS,
   ImagePickerIOS,
   ImageStore,
+  AlertIOS,
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-crop-picker';
@@ -146,19 +147,13 @@ export default class PersonHomePage extends Component {
   }
   //头像上传
   uploadAvatar(image){
-    
-     AsyncStorage.getItem('PJBLoginInfo').then((value) => {
-      let jsonValue = JSON.parse((value));
-      const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
 
-      DataRepository.postImageNetRepository('rest/upload/v1/uploadAvatar',{
+      DataRepository.fetchNormalNetRepository('rest/upload/v1/uploadAvatar',{
         fileName: 'head.jpg',
         imgStr: image.data,
-      },`${token_type} ${access_token}`).then(data => {
+      }).then(data => {
           this.setState({personalHead: `https://www.pj.com/img/${data.result.personalHead}`})
       }) 
-    })
-     
   }
   //拍照
   render() {
@@ -176,7 +171,24 @@ export default class PersonHomePage extends Component {
                           <Image source = {{url: this.state.personalHead}} style = {{width : 30,height: 30, borderRadius:15,marginRight: 10}}/>
                       </TouchableOpacity>
                       <View  style = {{backgroundColor: 'gray',flex: 1,height: 0.5}}/>
-                      <TouchableOpacity style = {{flexDirection: 'row',alignItems: 'center',height: 40}}>
+                      <TouchableOpacity 
+                          style = {{flexDirection: 'row',alignItems: 'center',height: 40}}
+                          onPress = {()=>{
+                            AlertIOS.prompt('修改用户名', null, value =>{
+                                this.setState({username: value})
+                            },'plain-text', this.state.username)
+
+                            // AlertIOS.prompt(
+                            //     '标题',
+                            //     '内容',
+                            //     (value:string)=>{
+                            //         console.log(value);
+                            //     },
+                            //     'plain-text',
+                            //     'default-string'
+                            // )
+                          }}
+                      >
                           <Text style = {{marginLeft: 10,flex: 1}}> 用户名</Text>
                           <Text style = {{marginRight: 10}}>{this.state.username}</Text>
                       </TouchableOpacity>

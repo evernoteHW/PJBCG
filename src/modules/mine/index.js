@@ -63,15 +63,10 @@ export default class Mine extends Component {
     this.loginSucessNotification.remove()
   }
   getHomeData(){
-    AsyncStorage.getItem('PJBLoginInfo').then((value) => {
-      let jsonValue = JSON.parse((value));
-      const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
-      console.log(`access_token = ${access_token} expires_in = ${expires_in} refresh_token = ${refresh_token} scope = ${scope} token_type=${token_type}`);
        DataRepository.fetchNormalNetRepository('rest/userHome/v1.4/homeInit',{
-      },`${token_type} ${access_token}`).then(data => {
+      }).then(data => {
           this.setState({userData: data.result})
       }) 
-    })
   }
   render() {
         const { navigate } = this.props.navigation;

@@ -29,15 +29,7 @@ export default class DataRepository {
             bodyArray.push(`${property}=${parms[property]}`)
           }
           var parmsStr = `${bodyArray.join('&')}`
-          var authorization_base64 = ''
-          if (token == '') {
-            // var bytes = utf8.encode("iOS:tcLMLiTokWOQGfEAGqry");
-            // var encoded = base64.encode(bytes);
-            authorization_base64 = `Basic aU9TOnRjTE1MaVRva1dPUUdmRUFHcXJ5`
-          }else{
-            authorization_base64 = token
-          }
-          //获取Toke
+          var authorization_base64 = `Basic aU9TOnRjTE1MaVRva1dPUUdmRUFHcXJ5`
           var fetch_url = `${baseUrl}/${url}`
 
           fetch(fetch_url,{
@@ -65,16 +57,15 @@ export default class DataRepository {
       )
     }
     static fetchNormalNetRepository(url,parms={},token=''){
-
+  
       return new Promise((resolve,reject) => {
-      
+
+          AsyncStorage.getItem('PJBLoginInfo').then((value) => {
+           let jsonValue = JSON.parse((value));
+           const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
+
           var bodyArray = ['referral=App Store']
-          var authorization_base64 = ''
-          if (token == '') {
-            authorization_base64 = `Basic aU9TOnRjTE1MaVRva1dPUUdmRUFHcXJ5`
-          }else{
-            authorization_base64 = token
-          }
+          var authorization_base64 = `${token_type} ${access_token}`
           //获取Toke
           var fetch_url = `${baseUrl}/${url}`
 
@@ -102,46 +93,8 @@ export default class DataRepository {
           }).catch((error) =>{
             reject(error)
         })
-      }
-      )
-    }
-    static postImageNetRepository(url,parms={},token=''){
-
-      return new Promise((resolve,reject) => {
-      
-          var bodyArray = ['referral=App Store']
-          var authorization_base64 = ''
-          if (token == '') {
-            authorization_base64 = `Basic aU9TOnRjTE1MaVRva1dPUUdmRUFHcXJ5`
-          }else{
-            authorization_base64 = token
-          }
-          //获取Toke
-          var fetch_url = `${baseUrl}/${url}`
-
-          fetch(fetch_url,{
-            method:  "POST",
-            headers: {
-              'Authorization': authorization_base64,
-              'Content-Type':  'application/json',
-            },
-            body: JSON.stringify(parms),
-          }).then((response) => {
-            // console.log(response);
-            if (response.ok) {
-              return response.json()
-            }else if (response.status == 401) {
-              //去登陆吧
-              // DeviceEventEmitter.emit('GoToLogin')
-            }else{
-
-            }
-          }).then((json)=>{
-            console.log(json);
-            resolve(json)
-          }).catch((error) =>{
-            reject(error)
-        })
+          })
+          
       }
       )
     }
