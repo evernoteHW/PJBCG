@@ -141,7 +141,6 @@ export default class PersonHomePage extends Component {
         height: 80,
         includeBase64: true,
       }).then(image => {
-        console.log(image);
         this.uploadAvatar(image)
       });
   }
@@ -156,7 +155,7 @@ export default class PersonHomePage extends Component {
         fileName: 'head.jpg',
         imgStr: image.data,
       },`${token_type} ${access_token}`).then(data => {
-          // this.setState({userData: data.result})
+          this.setState({personalHead: `https://www.pj.com/img/${data.result.personalHead}`})
       }) 
     })
      

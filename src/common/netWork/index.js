@@ -91,6 +91,7 @@ export default class DataRepository {
               return response.json()
             }else if (response.status == 401) {
               //去登陆吧
+              //Token  过期了
               DeviceEventEmitter.emit('GoToLogin')
             }else{
 
@@ -131,7 +132,7 @@ export default class DataRepository {
               return response.json()
             }else if (response.status == 401) {
               //去登陆吧
-              DeviceEventEmitter.emit('GoToLogin')
+              // DeviceEventEmitter.emit('GoToLogin')
             }else{
 
             }
