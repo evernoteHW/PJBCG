@@ -30,13 +30,16 @@ export const screenHeight = Dimensions.get('window').height
 
 const navigateAction = NavigationActions.navigate({
   routeName: 'Setting',
-  params:    {headerUrl : 'https://www.pj.com/img/upload/touxiang/201706051710342287.jpg'},
+  params:    {
+    headerUrl : 'https://www.pj.com/img/upload/touxiang/201706051710342287.jpg'
+  },
   action:    NavigationActions.navigate({ routeName: 'Setting'})
 })
 
 export default class Mine extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       userData:    '',
       modalVisible: false,
@@ -50,12 +53,14 @@ export default class Mine extends Component {
       }
   }
   componentDidMount(){
-    //
-    //  DataRepository.fetchNetRepository('rest/userHome/v1.4/homeInit',{
-    // },true).then(data => {
-    //     //登陆成功 
-    // }) 
+    this.loginSucessNotification = DeviceEventEmitter.addListener('LoginSuccess', (parms)=>{
+        //登陆成功
+        this.getHomeData(parms)
+    });
     this.getHomeData()
+  }
+  componentWillUnmount(){
+    this.loginSucessNotification.remove()
   }
   getHomeData(){
     AsyncStorage.getItem('PJBLoginInfo').then((value) => {
@@ -90,7 +95,12 @@ export default class Mine extends Component {
                           <TouchableOpacity 
                               style   = {styles.headerTopRight} 
                               onPress = {()=>{
-                                  this.props.navigation.dispatch(navigateAction)
+                                  // this.props.navigation.dispatch(navigateAction)
+                                  navigate('Setting',{
+                                    userData: this.state.userData
+                                    // headerUrl: this.state.userData.personalHead,
+                                    // realName:  this.state.userData.realName,
+                                  })
                               }}
                           >
                          <Image source = {require('../../images/mine/mine_header_top_setting.png')} style = {styles.headerTopRightIcon} /> 

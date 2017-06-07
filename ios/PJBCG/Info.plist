@@ -53,5 +53,9 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>大爷～给我用用相机撒</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>大爷～给我用用相册撒</string>
 </dict>
 </plist>

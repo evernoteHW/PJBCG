@@ -78,39 +78,43 @@ export default class Home extends Component {
       }
   }
   componentWillMount(){
-    
+       // const { navigation } = this.props
+       //  navigation.navigate('Login')
   }
   componentDidMount(){
-     this.notification = DeviceEventEmitter.addListener('GoToLogin', (parms)=>{
-      //登陆成功
+     this.loginNotification = DeviceEventEmitter.addListener('GoToLogin', (parms)=>{
+        //去登陆
         const { navigation } = this.props
         navigation.navigate('Login')
-        // this.getHomeData(parms)
+    });
+     this.loginSucessNotification = DeviceEventEmitter.addListener('LoginSuccess', (parms)=>{
+        //去登陆
+        this.getHomeData(parms)
     });
       this.getHomeData()
   }
+  componentWillUnmount(){
+    this.loginNotification.remove();
+    this.loginSucessNotification.remove()
+  }
   getHomeData(){
-    // AsyncStorage.getItem('PJBLoginInfo').then((value) => {
-    //   let jsonValue = JSON.parse((value));
-    //   const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
+    AsyncStorage.getItem('PJBLoginInfo').then((value) => {
+      let jsonValue = JSON.parse((value));
+      const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
 
-    //    DataRepository.fetchNormalNetRepository('rest/frontPage/v1.7/getBannerIndex',{
-    //     clientId: '4',
-    //   }).then(result => {
-    //       this.convertJSONToModel(result)
-    //   }) 
-    // })
+       DataRepository.fetchNormalNetRepository('rest/frontPage/v1.7/getBannerIndex',{
+        clientId: '4',
+      }).then(result => {
+          this.convertJSONToModel(result)
+      }) 
+    })
   }
   convertJSONToModel(result){
     const { bannerMap,mediaReportMap,newComerProduct,recommendMap } = result.result
     for (var i = 0; i < recommendMap.length; i++) {
       var item = recommendMap[i]
       var model = new RecommendModel(item)
-      console.log(item);
     }
-  }
-  componentWillUnmount(){
-    this.notification.remove();
   }
   _onScroll(e){
     const {contentInset, contentOffset,contentSize,layoutMeasurement} = e.nativeEvent

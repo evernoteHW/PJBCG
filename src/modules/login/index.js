@@ -74,6 +74,8 @@ export default class Login extends Component {
        navigation.goBack()
        DeviceEventEmitter.emit('LoginSuccess',{result:result});
        AsyncStorage.setItem('PJBLoginInfo',JSON.stringify(result),()=>{})
+    }).catch(error =>{
+      
     })   
   }
   render() {

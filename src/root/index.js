@@ -18,18 +18,19 @@ import {
 
 import { StackNavigator , TabNavigator} from 'react-navigation';
 
-import Attention   from '../modules/attention'
-import Finance       from '../modules/finance'
-import Home        from '../modules/home'
-import Mine        from '../modules/mine'
-import WebViewPage from '../modules/home/RootViewPage/Pages/WebViewPage'
-import ChannelManagePage from '../modules/home/RootViewPage/Pages/ChannelManagePage'
-import MoreChannelCityPage from '../modules/home/RootViewPage/Pages/MoreChannelCityPage'
-import AttentionTagPage from '../modules/attention/AttentionTagPage'
-import Guide from '../modules/guide'
-import Login from '../modules/login'
-import MessageCenter from '../modules/messageCenter'
-import Setting from '../modules/settings'
+import Attention             from '../modules/attention'
+import Finance               from '../modules/finance'
+import Home                  from '../modules/home'
+import Mine                  from '../modules/mine'
+import WebViewPage           from '../modules/home/RootViewPage/Pages/WebViewPage'
+import ChannelManagePage     from '../modules/home/RootViewPage/Pages/ChannelManagePage'
+import MoreChannelCityPage   from '../modules/home/RootViewPage/Pages/MoreChannelCityPage'
+import AttentionTagPage      from '../modules/attention/AttentionTagPage'
+import Guide                 from '../modules/guide'
+import Login                 from '../modules/login'
+import MessageCenter         from '../modules/messageCenter'
+import Setting               from '../modules/settings'
+import PersonHomePage        from '../modules/personHomePage'
 
 const RouteConfigs = 
 {
@@ -107,12 +108,12 @@ const TabNavigatorConfig = {
 const TabBars = TabNavigator(RouteConfigs,TabNavigatorConfig)
 
 const App = StackNavigator({
-    TabBars:                { screen: TabBars },
-    MessageCenter:          { screen: MessageCenter },
-    // AttentionTagPage:    { screen: AttentionTagPage },
-    ChannelManagePage:      { screen: ChannelManagePage},
-    // MoreChannelCityPage: { screen: MoreChannelCityPage},
-    Setting:                {screen: Setting},
+    TabBars:             { screen: TabBars },
+    MessageCenter:       { screen: MessageCenter },
+    // AttentionTagPage: { screen: AttentionTagPage },
+    ChannelManagePage:   { screen: ChannelManagePage},
+    Setting:             {screen: Setting},
+    PersonHomePage:      { screen: PersonHomePage},
 },{
     headerMode:           'screen' ,
     mode:                 'none',

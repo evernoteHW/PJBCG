@@ -26,6 +26,7 @@ import Login from '../login'
 import ThemeTopic from '../../common/ThemeTopic'
 import DataRepository from '../../common/netWork'
 
+
 export const screenWidth = Dimensions.get('window').width
 export const screenHeight = Dimensions.get('window').height
 
@@ -43,9 +44,10 @@ export default class Setting extends Component {
               {
                 data: [
                         {
-                          title:    '昵称',
-                          subTitle: '',
-                          // url:      require('../../images/mine/mine_list_exchange.png'),
+                          title:    props.navigation.state.params.userData.realName,
+                          subTitle: ' ',
+                          url:      props.navigation.state.params.userData.personalHead,
+                          section:  0,
                         },
                       ],
                 key: '0'
@@ -56,26 +58,31 @@ export default class Setting extends Component {
                           title:    '交易密码',
                           subTitle: '',
                           url:      require('../../images/settings/setting_deal_password.png'),
+                          section:  1,
                         },
                         {
                           title:    '登陆密码',
                           subTitle: '',
                           url:      require('../../images/settings/setting_login_password.png'),
+                          section:  1,
                         },
                         {
                           title:    '手势密码',
                           subTitle: '',
                           url:      require('../../images/settings/setting_gesture_lock.png'),
+                          section:  1,
                         },
                         {
                           title:    '修改手势密码',
                           subTitle: '',
                           url:      require('../../images/settings/setting_gesture_unlock.png'),
+                          section:  1,
                         },
                         {
                           title:    '指纹解锁',
                           subTitle: '',
                           url:      require('../../images/settings/setting_finger_gesture.png'),
+                          section:  1,
                         },
                       ],
                 key: '1'
@@ -85,17 +92,20 @@ export default class Setting extends Component {
                         {
                           title:    '关于我们',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_feed_back.png'),
+                          url:      require('../../images/settings/setting_icon_about_us.png'),
+                          section:  2,
                         },
                         {
                           title:    '问题反馈',
                           subTitle: '',
                           url:      require('../../images/settings/setting_feed_back.png'),
+                          section:  2,
                         },
                         {
                           title:    '检查更新',
                           subTitle: '',
                           url:      require('../../images/settings/setting_check_update.png'),
+                          section:  2,
                         }
                       ],
                 key: '2',
@@ -104,8 +114,9 @@ export default class Setting extends Component {
                 data: [
                         {
                           title:    '退出登录',
-                          subTitle: '',
+                          subTitle: '  ',
                           // url:      require('../../images/mine/mine_list_feedback.png'),
+                          section:  3,
                         }
                       ],
                 key: '3',
@@ -116,9 +127,20 @@ export default class Setting extends Component {
   }
   static navigationOptions = ({navigation}) => {
       return {
-        headerTitle: '账户中心 存管版',
-        headerTintColor : '#333333',//文字颜色
-        headerStyle: {backgroundColor: 'white',}
+        headerTitle:     '设置',
+        headerTintColor: '#333333',//文字颜色
+        headerStyle:     {backgroundColor: 'white',},
+        headerLeft:      (
+          <TouchableOpacity 
+              style   = {{width: 65,height: 44, justifyContent: 'center',backgroundColor: 'transparent'}}
+              onPress = {()=> navigation.goBack()}
+          >
+            <Image 
+              source = {require('../../images/common/common_return_btn_black.png')}
+              style = {{marginLeft:10, width: 20, height:20,backgroundColor: 'transparent'}}
+            />
+          </TouchableOpacity>
+        )
       }
   }
   componentDidMount(){
@@ -140,31 +162,47 @@ export default class Setting extends Component {
       }) 
     })
   }
-
+  _selectedIndex(item,index){
+    if (item.section == 0 && index==0) {
+        this.props.navigation.navigate('PersonHomePage',{
+          userData: this.props.navigation.state.params.userData
+        })
+    }
+  }
   renderItem = ({item, index}) =>{
+    if (item.section != 3) {
       return( 
           <TouchableOpacity 
             style   = {{backgroundColor: 'white', flexDirection: 'row', height: 50,alignItems: 'center'}}
-            // onPress = {()=> this._selectedIndex(item,index)}
+            onPress = {()=> this._selectedIndex(item,index)}
           >
-            <Image 
-              source = {item.url} 
-              style  = {{width: 24, height: 24,marginLeft: 10}}
-            />
-            <Text style = {{marginLeft: 10, fontSize: 14}}>{item.title}</Text>
-            <Text style = {{marginLeft: 5, color: '#3a3434', fontSize: 12}}>{item.subTitle}</Text>
+              <Image 
+                source = {item.section == 0 ? {url : item.url} :item.url} 
+                style  = {{width: 24, height: 24,marginLeft: 10, borderRadius: 12}}
+              />
+              <Text style = {{marginLeft: 10, fontSize: 14}}>{item.title}</Text>
+              <Text style = {{marginLeft: 5, color: 'rgb(97,100,109)', fontSize: 12, flex: 1}}>{item.subTitle}</Text>
+               <Image 
+                source = {require('../../images/settings/setting_forward_indicicar.png')} 
+                style  = {{width: 15, height: 15,right: 10,}}
+              />
           </TouchableOpacity>
       )
+    }else{
+       return( 
+          <TouchableOpacity 
+            style   = {{backgroundColor: 'white', flexDirection: 'row', height: 50,alignItems: 'center',justifyContent: 'center'}}
+            // onPress = {()=> this._selectedIndex(item,index)}
+          >
+              <Text style = {{marginLeft: 10, fontSize: 14,textAlign: 'center',color: 'rgb(208,14,44)'}}>{item.title}</Text>
+          </TouchableOpacity>
+      )
+    }
   }
-  _listHeaderComponent = () =>{
-      return( <View style={{flex:1,height:15}} /> )
-  }
-  _sectionSeparatorComponent = () =>{
-      return( <View style={{flex:1,height:15}} /> )
-  }
-  _itemSeparatorComponent = () =>{
-    return( <View style={{flex:1,height:1}} /> )
-  }
+  _listHeaderComponent = ()=> <View style={{flex:1,height:15}} />
+  _sectionSeparatorComponent = ()=> <View style={{flex:1,height:15}} />
+  _itemSeparatorComponent = ()=> <View style={{flex:1,height:1}} />
+
   render() {
         const { navigate } = this.props.navigation;
         return (
@@ -174,7 +212,7 @@ export default class Setting extends Component {
                   // style                     = {styles.sectionList}
                   sections                  = {this.state.sectionListData}
                   renderItem                = {this.renderItem}
-                  keyExtractor              = {(item,index) => `${index}`}
+                  keyExtractor              = {(item,index) => `。。。。${index}`}
                   SectionSeparatorComponent = {this._sectionSeparatorComponent}
                   ItemSeparatorComponent    = {this._itemSeparatorComponent}
                   ListHeaderComponent       = {this._listHeaderComponent}
