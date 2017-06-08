@@ -68,31 +68,31 @@ export default class DataRepository {
           var authorization_base64 = `${token_type} ${access_token}`
           //获取Toke
           var fetch_url = `${baseUrl}/${url}`
-
+          
           fetch(fetch_url,{
-            method:  "POST",
-            headers: {
-              'Authorization': authorization_base64,
-              'Content-Type':  'application/json',
-            },
-            body: JSON.stringify(parms),
-          }).then((response) => {
-            // console.log(response);
-            if (response.ok) {
-              return response.json()
-            }else if (response.status == 401) {
-              //去登陆吧
-              //Token  过期了
-              DeviceEventEmitter.emit('GoToLogin')
-            }else{
+                method:  "POST",
+                headers: {
+                  'Authorization': authorization_base64,
+                  'Content-Type':  'application/json',
+                },
+                body: JSON.stringify(parms),
+              }).then((response) => {
+                // console.log(response);
+                if (response.ok) {
+                  return response.json()
+                }else if (response.status == 401) {
+                  //去登陆吧
+                  //Token  过期了
+                  DeviceEventEmitter.emit('GoToLogin')
+                }else{
 
-            }
-          }).then((json)=>{
-            console.log(json);
-            resolve(json)
-          }).catch((error) =>{
-            reject(error)
-        })
+                }
+              }).then((json)=>{
+                console.log(json);
+                resolve(json)
+              }).catch((error) =>{
+                reject(error)
+            })
           })
           
       }

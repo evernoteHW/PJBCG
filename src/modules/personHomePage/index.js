@@ -107,11 +107,6 @@ export default class PersonHomePage extends Component {
     });
   }
   openCamera(){
-    // ImagePickerIOS.openCameraDialog({},imageUrl =>{
-    //   this.uploadAvatar(imageUrl)
-    // },error =>{
-    //   console.log(error)
-    // })
     ImagePicker.openCamera({
       width:         80,
       height:        80,
@@ -129,11 +124,6 @@ export default class PersonHomePage extends Component {
     }).then(image => {
       this.scareImage(image)
     });
-    // ImagePickerIOS.openSelectDialog({},imageUrl =>{
-      
-    // },error =>{
-    //   console.log(error)
-    // })
   }
   scareImage(image){
       ImagePicker.openCropper({
@@ -153,6 +143,20 @@ export default class PersonHomePage extends Component {
         imgStr: image.data,
       }).then(data => {
           this.setState({personalHead: `https://www.pj.com/img/${data.result.personalHead}`})
+      }) 
+  }
+  updateUsername(value){
+      if (value == this.state.username) {
+        Alert.alert('没有修改')
+        return;
+      }
+      DataRepository.fetchNormalNetRepository('rest/user/v1/updateUsername',{
+        username: value,
+      }).then(data => {
+        if (data.result == 'SUCCESS') {
+          Alert.alert('修改成功')
+          this.setState({username: value})
+        }
       }) 
   }
   //拍照
@@ -175,18 +179,8 @@ export default class PersonHomePage extends Component {
                           style = {{flexDirection: 'row',alignItems: 'center',height: 40}}
                           onPress = {()=>{
                             AlertIOS.prompt('修改用户名', null, value =>{
-                                this.setState({username: value})
+                                this.updateUsername(value)
                             },'plain-text', this.state.username)
-
-                            // AlertIOS.prompt(
-                            //     '标题',
-                            //     '内容',
-                            //     (value:string)=>{
-                            //         console.log(value);
-                            //     },
-                            //     'plain-text',
-                            //     'default-string'
-                            // )
                           }}
                       >
                           <Text style = {{marginLeft: 10,flex: 1}}> 用户名</Text>

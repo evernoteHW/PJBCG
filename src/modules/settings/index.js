@@ -19,6 +19,8 @@ import {
   Dimensions,
   StatusBar,
   Alert,
+  AlertIOS,
+  Switch,
 } from 'react-native';
 
 import { NavigationActions } from 'react-navigation'
@@ -61,7 +63,7 @@ export default class Setting extends Component {
                           section:  1,
                         },
                         {
-                          title:    '登陆密码',
+                          title:    '登录密码',
                           subTitle: '',
                           url:      require('../../images/settings/setting_login_password.png'),
                           section:  1,
@@ -77,6 +79,7 @@ export default class Setting extends Component {
                           subTitle: '',
                           url:      require('../../images/settings/setting_gesture_unlock.png'),
                           section:  1,
+
                         },
                         {
                           title:    '指纹解锁',
@@ -122,7 +125,9 @@ export default class Setting extends Component {
                 key: '3',
               },
         ],
-      modalVisible: false,
+      modalVisible:    false,
+      gestureSwitchOn: false,
+      fingerSwitchOn:  false,
     }
   }
   static navigationOptions = ({navigation}) => {
@@ -152,23 +157,103 @@ export default class Setting extends Component {
     // this.getHomeData()
   }
   getHomeData(){
-    AsyncStorage.getItem('PJBLoginInfo').then((value) => {
-      let jsonValue = JSON.parse((value));
-      const {access_token,expires_in,refresh_token,scope,token_type} = jsonValue
-      console.log(`access_token = ${access_token} expires_in = ${expires_in} refresh_token = ${refresh_token} scope = ${scope} token_type=${token_type}`);
        DataRepository.fetchNormalNetRepository('rest/userHome/v1.4/homeInit',{
       },`${token_type} ${access_token}`).then(data => {
           this.setState({userData: data.result})
       }) 
-    })
   }
   _selectedIndex(item,index){
     if (item.section == 0 && index==0) {
         this.props.navigation.navigate('PersonHomePage',{
           userData: this.props.navigation.state.params.userData
         })
+    }else if (item.section == 1){
+        if (index == 0) {
+
+          AlertIOS.alert('修改交易密码', '', [
+            { text:'取消' },
+            { text:'确认', onPress: ()=>{
+              // this.sendMobilePhoneSMS()
+              AlertIOS.prompt(
+                  '修改交易密码',
+                  '',
+                  [
+                    {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    {text: '确认', onPress: inputValue => 
+                      this.resetDealpwd(inputValue.login,inputValue.password)
+                    },
+                  ],
+                  'login-password',
+                  '',
+                  'number-pad',
+               );
+              } 
+            },
+          ]);
+         
+   
+        }else  if (index == 1) {
+
+          AlertIOS.alert('修改登录密码', '', [
+            { text:'取消' },
+            { text:'确认', onPress: ()=>{
+  
+                AlertIOS.prompt(
+                    '修改交易密码',
+                    '',
+                    [
+                      {text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                      {text: '确认', onPress: inputValue => {
+                          this.updateLoginPwd(inputValue.login,inputValue.password)
+                        }
+                      },
+                    ],
+                    'login-password',
+                    '',
+                    'number-pad',
+                 );
+                }
+              },
+            ]
+          );
+        }else  if (index == 2) {
+  
+        }
     }
   }
+  //先发短信 rest/user/v1.1/sendMobilePhoneSMS
+  sendMobilePhoneSMS(){
+     DataRepository.fetchNormalNetRepository('rest/user/v1.1/sendMobilePhoneSMS',{
+        sendType: '3',
+      }).then(data => {
+          if (data.result.success) {
+              Alert.alert(`验证码发送成功 过期时间${data.result.remainTime}`)
+          }
+      }) 
+  }
+  resetDealpwd(code,password){
+      DataRepository.fetchNormalNetRepository('rest/user/v1/resetDealpwd',{
+        dealpwd: password,
+        code:    code,
+      }).then(data => {
+        if (data.result == 'SUCCESS') {
+          Alert.alert('修改成功')
+        }
+      }) 
+  }
+  updateLoginPwd(oldPassword,newPassword){
+      DataRepository.fetchNormalNetRepository('rest/user/v1/updateLoginPwd',{
+        oldPassword: oldPassword,
+        newPassword:    newPassword,
+      }).then(data => {
+        if (data.result == 'SUCCESS') {
+          Alert.alert('修改成功')
+        }
+      }) 
+  }
+  //开启关闭手势密码
+  //修改手势密码
+  //指纹解锁
   renderItem = ({item, index}) =>{
     if (item.section != 3) {
       return( 
@@ -182,10 +267,33 @@ export default class Setting extends Component {
               />
               <Text style = {{marginLeft: 10, fontSize: 14}}>{item.title}</Text>
               <Text style = {{marginLeft: 5, color: 'rgb(97,100,109)', fontSize: 12, flex: 1}}>{item.subTitle}</Text>
+              {
+               ((item.section == 1 && index == 2) || (item.section == 1 && index == 4))?
+                <Switch 
+                  // disabled          = {true}
+                  style             = {{marginRight: 10}}
+                  value             = {index == 2 ? this.gestureSwitchOn: this.fingerSwitchOn}
+                  onTintColor       = {'red'}
+                  // thumbTintColor = {'orange'}
+                  onValueChange     = {value => {
+                    Alert.alert(`value == ${value}`)
+                    if (index == 2) {
+                        this.setState({
+                          gestureSwitchOn: true
+                        })
+                    }else{
+                       this.setState({
+                          fingerSwitchOn: value
+                        })
+                    }
+                  }}
+                />
+                :
                <Image 
                 source = {require('../../images/settings/setting_forward_indicicar.png')} 
                 style  = {{width: 15, height: 15,right: 10,}}
               />
+              }
           </TouchableOpacity>
       )
     }else{

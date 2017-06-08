@@ -77,11 +77,26 @@ export default class Home extends Component {
           // headerStyle: headerStyle
       }
   }
+  componentWillReceiveProps(nextProps){
+    console.log(`componentWillReceiveProps ${nextProps}`)
+  }
+  shouldComponentUpdate(nextProps,nextState){
+    console.log(`shouldComponentUpdate nextProps = ${nextProps} nextState =${nextState}`)
+    return true
+  }
+  componentWillUpdate(nextProps,nextState){
+    console.log(`componentWillUpdate nextProps = ${nextProps} nextState =${nextState}`)
+  }
+  componentDidUpdate(nextProps,nextState){
+    console.log(`componentDidUpdate nextProps = ${nextProps} nextState =${nextState}`)
+  }
   componentWillMount(){
-       // const { navigation } = this.props
-       //  navigation.navigate('Login')
+    console.log(`componentWillMount`)
+     // const { navigation } = this.props
+     //  navigation.navigate('Login')
   }
   componentDidMount(){
+    console.log(`componentDidMount`)
      this.loginNotification = DeviceEventEmitter.addListener('GoToLogin', (parms)=>{
         //去登陆
         const { navigation } = this.props
@@ -93,10 +108,13 @@ export default class Home extends Component {
     });
       this.getHomeData()
   }
+
   componentWillUnmount(){
+    console.log(`componentWillUnmount`)
     this.loginNotification.remove();
     this.loginSucessNotification.remove()
   }
+
   getHomeData(){
     AsyncStorage.getItem('PJBLoginInfo').then((value) => {
       let jsonValue = JSON.parse((value));
