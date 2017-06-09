@@ -1,7 +1,8 @@
 
-export default class RecommondModel {
+export default class RecommendModel {
 	constructor(props){
 		// super(props);
+		this.props              = props
 		this.canInvestAmount    = props.canInvestAmount;
 		this.countdownEnabled   = props.countdownEnabled;
 		this.fundStatusDescribe = props.fundStatusDescribe;
@@ -12,5 +13,23 @@ export default class RecommondModel {
 		this.productTypeName    = props.productTypeName;
 		this.saleCountdownTime  = props.saleCountdownTime;
 		this.ttbStatus          = props.ttbStatus;
+		this.tag1               = props.tag1
+		this.tag2               = props.tag2
+		this.deadlineMin        = props.deadlineMin
+		this.deadlineMax        = props.deadlineMax
+		this.activityTime       = props.activityTime
 	}
 }
+
+// export default function RecommendModel(argument) {
+// 	this.canInvestAmount    = argument.canInvestAmount;
+// 	this.countdownEnabled   = argument.countdownEnabled;
+// 	this.fundStatusDescribe = argument.fundStatusDescribe;
+// 	this.openSaleTime       = argument.openSaleTime;
+// 	this.productAnnualRate  = argument.productAnnualRate;
+// 	this.productName        = argument.productName;
+// 	this.productTypeId      = argument.productTypeId;
+// 	this.productTypeName    = argument.productTypeName;
+// 	this.saleCountdownTime  = argument.saleCountdownTime;
+// 	this.ttbStatus          = argument.ttbStatus;
+// }

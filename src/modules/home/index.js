@@ -30,6 +30,7 @@ import RootViewPage from './RootViewPage'
 import DataRepository from '../../common/netWork'
 import RecommendModel from '../../models/RecommendModel'
 
+
 import { NavigationActions } from 'react-navigation'
 
 const navigateAction = NavigationActions.navigate({
@@ -38,11 +39,16 @@ const navigateAction = NavigationActions.navigate({
   action: NavigationActions.navigate({ routeName: 'Setting'})
 })
 
+
 export default class Home extends Component {
   constructor(props) {
     super(props);
     // props.navigation.setParams({isNormal: false})
     this.state = {
+      bannerMap:       [],
+      mediaReportMap:  [],
+      newComerProduct: [],
+      recommendMap:    [],
     };
   }
   static navigationOptions = ({navigation}) => {
@@ -92,6 +98,7 @@ export default class Home extends Component {
     console.log(`componentDidUpdate nextProps = ${nextProps} nextState =${nextState}`)
   }
   componentWillMount(){
+
     console.log(`componentWillMount`)
      // const { navigation } = this.props
      //  navigation.navigate('Login')
@@ -126,14 +133,19 @@ export default class Home extends Component {
       }).then(result => {
           this.convertJSONToModel(result)
       }) 
+
     })
   }
   convertJSONToModel(result){
     const { bannerMap,mediaReportMap,newComerProduct,recommendMap } = result.result
+
+    var recommendMapTemp = []
     for (var i = 0; i < recommendMap.length; i++) {
       var item = recommendMap[i]
       var model = new RecommendModel(item)
+      recommendMapTemp.push(model)
     }
+    this.setState({recommendMap: recommendMapTemp})
   }
   _onScroll(e){
     const {contentInset, contentOffset,contentSize,layoutMeasurement} = e.nativeEvent
@@ -167,8 +179,8 @@ export default class Home extends Component {
               </View>
     )
   }
-  _renderSingleView(){
-    return ( <View>
+  _renderSingleView(model,index){
+    return ( <View key = {index}>
                 <View style = {styles.whiteBg} />
                 <View style = {styles.recommond}>
                   <Image style = {styles.recommondImage} source = {require('../../images/home/recommond_btn_bg.png')}>
@@ -177,39 +189,41 @@ export default class Home extends Component {
                 </View>
                 <View style = {styles.contentTopView}>
                   <Image style = {styles.contentTopViewImage} source = {require('../../images/home/home_content_head_ppb_icon.png')}/>
-                  <Text style = {styles.contentTopViewTextTitle}>票票宝</Text>
+                  <Text style = {styles.contentTopViewTextTitle}>{model.productName}</Text>
                   <View style = {styles.contentTopViewLine}/>
-                  <Text style = {styles.contentTopViewTextSubTitle}>定期理财</Text>
-                  <View style = {styles.contentTopViewTextBg}>
-                    <Text style = {styles.contentTopViewTextTag}>加息券</Text>
-                  </View>
-                  <View style = {styles.contentTopViewTextBg}>
-                    <Text style = {styles.contentTopViewTextTag}>加息券</Text>
-                  </View>
+                  <Text style = {styles.contentTopViewTextSubTitle}>{model.productTypeName}</Text>
+                  {
+                    (model.tag1 != undefined) ? <View style = {styles.contentTopViewTextBg}>
+                        <Text style = {styles.contentTopViewTextTag}>{model.tag1}</Text>
+                      </View> : null
+                  }
+                  {
+                    (model.tag2 != undefined) ? <View style = {styles.contentTopViewTextBg}>
+                      <Text style = {styles.contentTopViewTextTag}>{model.tag2}</Text>
+                    </View> : null
+                  }
                   <View style = {styles.bankIconView}>
                     <Image style = {styles.bankIcon} source = {require('../../images/home/huaxin_cg_bank_icon.png')}/>
                     <Text style = {styles.bankInfoText}>华兴银行存管</Text>
                   </View>
                  
                 </View> 
-                { this._renderContentView() }
-                { this._renderContentView() }
+                { this._renderContentView(model) }
              </View>
     )
   }
-  _renderContentView(){
+  _renderContentView(model){
     const {navigation} = this.props
     return <TouchableOpacity style = {styles.contentView} onPress = {()=> navigation.navigate('ChannelManagePage')}>
               <View style = {styles.contentTopLineView}/>
               <View style = {styles.contentPercentView}>
                 <Text style = {styles.contentPercentTextBg}>
-                  <Text style = {styles.contentPercentText}>6.3%</Text>
-                  <Text style = {styles.contentPercentText1}>~8.8%</Text>
+                  <Text style = {styles.contentPercentText}>{model.productAnnualRate}</Text>
                 </Text>
-                <Text style = {styles.contentPercentTextBg}>
-                  <Text style = {styles.contentPercentText}>6.3%</Text>
-                  <Text style = {styles.contentPercentText1}>~8.8%</Text>
-                </Text>
+                { model.productTypeId == '1' ? this._renderTTB(model) : null }
+                { model.productTypeId == '2' ? this._renderTTBPlus(model) : null }
+                { model.productTypeId == '3' ? this._renderPPB(model) : null }
+                { model.productTypeId == '4' ? this._renderVip(model) : null }
               </View>
               <View style = {styles.contentCenterLine}/>
               <View style = {styles.contentTipViewBg}>
@@ -218,14 +232,35 @@ export default class Home extends Component {
               </View>
            </TouchableOpacity>
   }
-  _renderVipView(){
-
+  _renderTTB(model){
+  return <Text style = {styles.contentPercentTextBg}>
+            <Text style = {styles.contentPercentText}>随存随取</Text>
+        </Text>
+  }
+  _renderTTBPlus(model){
+   return <Text style = {styles.contentPercentTextBg}>
+              <Text style = {styles.contentPercentText}>{model.lockUpPeriodDesc}</Text>
+              <Text style = {styles.contentPercentText1}>灵活提现</Text>
+          </Text>
+  }
+  _renderPPB(model){
+   return <Text style = {styles.contentPercentTextBg}>
+              <Text style = {styles.contentPercentText}>{model.deadlineMin}</Text>
+              <Text style = {styles.contentPercentText1}>~{model.deadlineMax}天</Text>
+          </Text>
+  }
+  _renderVip(model){
+   return <Text style = {styles.contentPercentTextBg}>
+              <Text style = {styles.contentPercentText}>注册会员专享</Text>
+              <Text style = {styles.contentPercentText1}>{model.activityTime}</Text>
+          </Text>
   }
 
   render() {
     const { navigation } = this.props;
     return (
       <View style = {styles.container}>
+<<<<<<< Updated upstream
           <ScrollView 
           scrollEventThrottle = {10}
           onScroll            = {this._onScroll.bind(this)}
@@ -237,6 +272,21 @@ export default class Home extends Component {
               { this._renderSingleView() }
             </View>
           </ScrollView>
+=======
+        <ScrollView 
+        scrollEventThrottle = {10}
+        onScroll            = {this._onScroll.bind(this)}
+        >
+          <View style = {styles.scrollViewContainer}>
+          { this._renderHeaderView() }
+          {
+            this.state.recommendMap.map((model,index) =>{
+              return this._renderSingleView(model,index)
+            })
+          }
+        </View>
+        </ScrollView>
+>>>>>>> Stashed changes
       </View>
     );
   }
