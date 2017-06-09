@@ -18,6 +18,7 @@ import {
   Animated,
   DeviceEventEmitter,
   AsyncStorage,
+  AlertIOS,
 } from 'react-native';
 
 
@@ -225,17 +226,17 @@ export default class Home extends Component {
     const { navigation } = this.props;
     return (
       <View style = {styles.container}>
-        <ScrollView 
-        scrollEventThrottle = {10}
-        onScroll            = {this._onScroll.bind(this)}
-        >
-          <View style = {styles.scrollViewContainer}>
-          { this._renderHeaderView() }
-          { this._renderSingleView() }
-          { this._renderSingleView() }
-          { this._renderSingleView() }
-        </View>
-        </ScrollView>
+          <ScrollView 
+          scrollEventThrottle = {10}
+          onScroll            = {this._onScroll.bind(this)}
+          >
+            <View style = {styles.scrollViewContainer}>
+              { this._renderHeaderView() }
+              { this._renderSingleView() }
+              { this._renderSingleView() }
+              { this._renderSingleView() }
+            </View>
+          </ScrollView>
       </View>
     );
   }

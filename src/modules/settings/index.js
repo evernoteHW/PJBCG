@@ -29,6 +29,13 @@ import ThemeTopic from '../../common/ThemeTopic'
 import DataRepository from '../../common/netWork'
 
 
+const element = (
+  <Text className="greeting">
+    Hello, world!
+  </Text>
+);
+
+
 export const screenWidth = Dimensions.get('window').width
 export const screenHeight = Dimensions.get('window').height
 
@@ -266,6 +273,7 @@ export default class Setting extends Component {
                 style  = {{width: 24, height: 24,marginLeft: 10, borderRadius: 12}}
               />
               <Text style = {{marginLeft: 10, fontSize: 14}}>{item.title}</Text>
+              {element}
               <Text style = {{marginLeft: 5, color: 'rgb(97,100,109)', fontSize: 12, flex: 1}}>{item.subTitle}</Text>
               {
                ((item.section == 1 && index == 2) || (item.section == 1 && index == 4))?
