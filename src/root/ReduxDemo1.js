@@ -30,7 +30,7 @@ export default class PJBCG extends Component {
 		     <View style={{justifyContent: 'center',flex: 1, alignItems: 'center',backgroundColor: '#F5FCFF'}}>
 				<CounterApp />
 		     </View>
-		 </Provider>
+		</Provider>
     );
   }
 }
