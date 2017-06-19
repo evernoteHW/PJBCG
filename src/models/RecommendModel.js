@@ -8,7 +8,7 @@ export default class RecommendModel {
 		this.fundStatusDescribe = props.fundStatusDescribe;
 		this.openSaleTime       = props.openSaleTime;
 		this.productAnnualRate  = props.productAnnualRate;
-		this.productName        = props.productName;
+		this.productName        = props.productName ? props.productName: '';
 		this.productTypeId      = props.productTypeId;
 		this.productTypeName    = props.productTypeName;
 		this.saleCountdownTime  = props.saleCountdownTime;

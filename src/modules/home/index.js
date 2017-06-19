@@ -84,25 +84,25 @@ export default class Home extends Component {
           // headerStyle: headerStyle
       }
   }
-  componentWillReceiveProps(nextProps){
-    console.log(`componentWillReceiveProps ${nextProps}`)
-  }
-  shouldComponentUpdate(nextProps,nextState){
-    console.log(`shouldComponentUpdate nextProps = ${nextProps} nextState =${nextState}`)
-    return true
-  }
-  componentWillUpdate(nextProps,nextState){
-    console.log(`componentWillUpdate nextProps = ${nextProps} nextState =${nextState}`)
-  }
-  componentDidUpdate(nextProps,nextState){
-    console.log(`componentDidUpdate nextProps = ${nextProps} nextState =${nextState}`)
-  }
-  componentWillMount(){
+  // componentWillReceiveProps(nextProps){
+  //   console.log(`componentWillReceiveProps ${nextProps}`)
+  // }
+  // shouldComponentUpdate(nextProps,nextState){
+  //   console.log(`shouldComponentUpdate nextProps = ${nextProps} nextState =${nextState}`)
+  //   return true
+  // }
+  // componentWillUpdate(nextProps,nextState){
+  //   console.log(`componentWillUpdate nextProps = ${nextProps} nextState =${nextState}`)
+  // }
+  // componentDidUpdate(nextProps,nextState){
+  //   console.log(`componentDidUpdate nextProps = ${nextProps} nextState =${nextState}`)
+  // }
+  // componentWillMount(){
 
-    console.log(`componentWillMount`)
-     // const { navigation } = this.props
-     //  navigation.navigate('Login')
-  }
+  //   console.log(`componentWillMount`)
+  //    // const { navigation } = this.props
+  //    //  navigation.navigate('Login')
+  // }
   componentDidMount(){
     console.log(`componentDidMount`)
      this.loginNotification = DeviceEventEmitter.addListener('GoToLogin', (parms)=>{
@@ -180,6 +180,9 @@ export default class Home extends Component {
     )
   }
   _renderSingleView(model,index){
+    if (model == undefined) {
+      return null
+    }
     return ( <View key = {index}>
                 <View style = {styles.whiteBg} />
                 <View style = {styles.recommond}>
@@ -260,33 +263,21 @@ export default class Home extends Component {
     const { navigation } = this.props;
     return (
       <View style = {styles.container}>
-<<<<<<< Updated upstream
+
           <ScrollView 
           scrollEventThrottle = {10}
           onScroll            = {this._onScroll.bind(this)}
           >
             <View style = {styles.scrollViewContainer}>
               { this._renderHeaderView() }
-              { this._renderSingleView() }
-              { this._renderSingleView() }
-              { this._renderSingleView() }
+              {
+                this.state.recommendMap.map((item,index) =>{
+                  return this._renderSingleView(item,index)
+                })
+              }
             </View>
           </ScrollView>
-=======
-        <ScrollView 
-        scrollEventThrottle = {10}
-        onScroll            = {this._onScroll.bind(this)}
-        >
-          <View style = {styles.scrollViewContainer}>
-          { this._renderHeaderView() }
-          {
-            this.state.recommendMap.map((model,index) =>{
-              return this._renderSingleView(model,index)
-            })
-          }
-        </View>
-        </ScrollView>
->>>>>>> Stashed changes
+
       </View>
     );
   }
