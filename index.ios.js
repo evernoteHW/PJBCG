@@ -5,7 +5,8 @@
  *
 */
  import { AppRegistry } from 'react-native'
-import PJBCG from './src/root'
+// import PJBCG from './src/root'
+import PJBCG from './redux_src/root'
 // import PJBCG from './src/root/colorAnimated'
 // import PJBCG from './src/root/counters'
 // import PJBCG from './src/root/testGesture'
