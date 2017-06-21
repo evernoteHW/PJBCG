@@ -25,8 +25,8 @@ import {
 
 import { NavigationActions } from 'react-navigation'
 import Login from '../login'
-import ThemeTopic from '../../common/ThemeTopic'
-import DataRepository from '../../common/netWork'
+
+import DataRepository from '../../../common/netWork'
 
 
 const element = (
@@ -66,32 +66,32 @@ export default class Setting extends Component {
                         {
                           title:    '交易密码',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_deal_password.png'),
+                          url:      require('../../../resources/images/settings/setting_deal_password.png'),
                           section:  1,
                         },
                         {
                           title:    '登录密码',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_login_password.png'),
+                          url:      require('../../../resources/images/settings/setting_login_password.png'),
                           section:  1,
                         },
                         {
                           title:    '手势密码',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_gesture_lock.png'),
+                          url:      require('../../../resources/images/settings/setting_gesture_lock.png'),
                           section:  1,
                         },
                         {
                           title:    '修改手势密码',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_gesture_unlock.png'),
+                          url:      require('../../../resources/images/settings/setting_gesture_unlock.png'),
                           section:  1,
 
                         },
                         {
                           title:    '指纹解锁',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_finger_gesture.png'),
+                          url:      require('../../../resources/images/settings/setting_finger_gesture.png'),
                           section:  1,
                         },
                       ],
@@ -102,19 +102,19 @@ export default class Setting extends Component {
                         {
                           title:    '关于我们',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_icon_about_us.png'),
+                          url:      require('../../../resources/images/settings/setting_icon_about_us.png'),
                           section:  2,
                         },
                         {
                           title:    '问题反馈',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_feed_back.png'),
+                          url:      require('../../../resources/images/settings/setting_feed_back.png'),
                           section:  2,
                         },
                         {
                           title:    '检查更新',
                           subTitle: '',
-                          url:      require('../../images/settings/setting_check_update.png'),
+                          url:      require('../../../resources/images/settings/setting_check_update.png'),
                           section:  2,
                         }
                       ],
@@ -148,7 +148,7 @@ export default class Setting extends Component {
               onPress = {()=> navigation.goBack()}
           >
             <Image 
-              source = {require('../../images/common/common_return_btn_black.png')}
+              source = {require('../../../resources/images/common/common_return_btn_black.png')}
               style = {{marginLeft:10, width: 20, height:20,backgroundColor: 'transparent'}}
             />
           </TouchableOpacity>
@@ -298,7 +298,7 @@ export default class Setting extends Component {
                 />
                 :
                <Image 
-                source = {require('../../images/settings/setting_forward_indicicar.png')} 
+                source = {require('../../../resources/images/settings/setting_forward_indicicar.png')} 
                 style  = {{width: 15, height: 15,right: 10,}}
               />
               }

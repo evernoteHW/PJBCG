@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     left:            10,
     right:           10,
-    top:             20,
+    top:             10,
     bottom:          10,
     borderRadius:    5,
     shadowColor:     '#3a3433',
@@ -112,13 +112,12 @@ const styles = StyleSheet.create({
     color:        'white',
   },
   contentTopView:{
-    marginLeft:         10,
-    marginRight:        10,
-    flexDirection:      'row',
-    marginTop:          5,
-    marginBottom:       20,
-    alignItems:         'center',
-    alignItems:         'center',
+    marginLeft:    10,
+    marginRight:   10,
+    flexDirection: 'row',
+    marginTop:     30,
+    marginBottom:  20,
+    alignItems:    'center',
   },
   contentTopViewImage:{
     width:      16,
@@ -152,6 +151,7 @@ const styles = StyleSheet.create({
     marginRight:  5,
     marginTop:    2,
     marginBottom: 2,
+    fontSize: 12,
   },
   bankIconView:{
     // backgroundColor: 'yellow',
@@ -174,34 +174,38 @@ const styles = StyleSheet.create({
     height:          1,
   },
   contentCenterLine:{
-    position:        'absolute',
+    // position:        'absolute',
     backgroundColor: 'rgb(241,239,235)',
-    width:           1,
+    width:           0.5,
     height:          50,
-    bottom:          30,
-    alignSelf:       'center',
+    // bottom:          30,
+    // alignSelf:       'center',
   },
   contentView:{
     // flexDirection: 'row',
-    // 
   },
   contentPercentView:{
     flexDirection: 'row',
-    marginTop:     20,
+    marginTop:     15,
+    marginLeft:    10,
+    marginRight:   10,
+    marginBottom:  25,
   },
   contentPercentTextBg:{
     alignItems:     'center',
     justifyContent: 'center',
-    flex:           2,
-    // textAlign:      'center',
+    flex:           3,
+    textAlign:      'center',
   },
   contentPercentText:{
-    color:    '#e94d4e',
-    fontSize: 20,
+    color:        '#e94d4e',
+    fontSize:     20,
+    marginBottom: 10,
   },
   contentPercentText1:{
     color:    '#3a3434',
     fontSize: 14,
+    marginBottom: 16,
   },
   contentTipViewBg:{
     marginTop: 5,
@@ -209,7 +213,7 @@ const styles = StyleSheet.create({
     marginBottom : 30,
   },
   contentTipText:{
-    flex:      2,
+    flex:      3,
     textAlign: 'center',
     color:     '#6d6261',
   },
@@ -222,6 +226,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+   recommondImage:{
+    width:          104,
+    height:         48,
+    justifyContent: 'center',
+    alignItems:     'center',
+  },
+  recommondText:{
+    marginRight:  6,
+    marginBottom: 6,
+    color:        'white',
   },
 });
 

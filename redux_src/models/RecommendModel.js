@@ -13,11 +13,15 @@ export default class RecommendModel {
 		this.productTypeName    = props.productTypeName;
 		this.saleCountdownTime  = props.saleCountdownTime;
 		this.ttbStatus          = props.ttbStatus;
-		this.tag1               = props.tag1
-		this.tag2               = props.tag2
-		this.deadlineMin        = props.deadlineMin
-		this.deadlineMax        = props.deadlineMax
-		this.activityTime       = props.activityTime
+		this.tag1               = props.tag1;
+		this.tag2               = props.tag2;
+		this.deadlineMin        = props.deadlineMin;
+		this.deadlineMax        = props.deadlineMax;
+		this.activityTime       = props.activityTime;
+		this.lockUpPeriodDesc   = props.lockUpPeriodDesc;
+		this.productItem        = props.productItem;
+		this.minAnnualRate      = props.minAnnualRate;
+		this.maxAnnualRate      = props.maxAnnualRate;
 	}
 }
 
