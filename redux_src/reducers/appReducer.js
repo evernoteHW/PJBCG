@@ -1,25 +1,17 @@
 import { NavigationActions } from 'react-navigation';
 
-import  {App} from '../root/navigators'
+import { App } from '../root/navigators'
+import * as ActionTypes from '../actions/actionTypes'
 
-
-const firstAction = App.router.getActionForPathAndParams('TabBars');
-const tempNavState = App.router.getStateForAction(firstAction);
-// const secondAction = AppNavigator.router.getActionForPathAndParams('Mine');
+const navState = App.router.getStateForAction(App.router.getActionForPathAndParams('TabBars'));
 const initialNavState = App.router.getStateForAction(
-  tempNavState
+  navState
 );
 
 export default appReducer = (state = initialNavState, action) =>{
   let nextState;
   switch (action.type) {
-    case 'Login':
-      nextState = App.router.getStateForAction(NavigationActions.navigate({ routeName: 'Login' }),state);
-      break;
-    case 'Logout':
-      nextState = App.router.getStateForAction(NavigationActions.navigate({ routeName: 'Logout' }),state);
-      break;
-   case 'PushSetting':
+   case ActionTypes.PUSH_SETTING:
       nextState = App.router.getStateForAction( NavigationActions.navigate({ 
           routeName: 'Setting',
           params: {
@@ -32,7 +24,5 @@ export default appReducer = (state = initialNavState, action) =>{
       nextState = App.router.getStateForAction(action, state);
       break;
   }
-
-  // Simply return the original `state` if `nextState` is null or undefined.
   return nextState || state;
 }

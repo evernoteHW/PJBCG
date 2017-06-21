@@ -88,7 +88,7 @@ export default class DataRepository {
 
                 }
               }).then((json)=>{
-                console.log(json);
+                // console.log(json);
                 resolve(json)
               }).catch((error) =>{
                 reject(error)

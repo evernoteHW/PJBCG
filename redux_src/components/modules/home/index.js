@@ -103,10 +103,11 @@ export default class Home extends Component {
     )
   }
   _renderContentView(model){
-    const {navigation,onClick} = this.props
+    const { navigation,onClick,homeActions } = this.props
     return <TouchableOpacity style = {styles.contentView} onPress = {()=> {
                 // navigation.navigate('ChannelManagePage')
-                onClick()
+                // onClick()
+                  homeActions.pushLogin()
                 }
               }
             >

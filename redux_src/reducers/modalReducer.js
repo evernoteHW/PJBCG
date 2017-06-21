@@ -1,7 +1,7 @@
 import { NavigationActions } from 'react-navigation';
 
 import { ModalApp } from '../root/modalApp'
-
+import * as ActionTypes from '../actions/actionTypes'
 
 const firstAction = ModalApp.router.getActionForPathAndParams('MainCardNavigator');
 const tempNavState = ModalApp.router.getStateForAction(firstAction);
@@ -13,7 +13,7 @@ const initialNavState = ModalApp.router.getStateForAction(
 export default modalReducer = (state = initialNavState, action) =>{
   let nextState;
   switch (action.type) {
-    case 'Login':
+    case ActionTypes.PUSH_LOGIN:
       nextState = ModalApp.router.getStateForAction(NavigationActions.navigate({ routeName: 'Login' }),state);
       break;
     case 'Logout':

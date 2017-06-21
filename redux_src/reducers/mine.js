@@ -4,20 +4,22 @@ const defaultState = {
   userData: {}
 }
 
+import * as ActionTypes from '../actions/actionTypes'
+
 const mineFetchResult = (state = defaultState, action) => {
   switch (action.type) {
-    case 'MINE_FETCH_POSTS_REQUEST':
+    case ActionTypes.MINE_POST_REQUEST:
       return {
         ...state,
         isFetching: true,
       }
-    case 'MINE_FETCH_POSTS_SUCCESS':
+    case ActionTypes.MINE_POST_REQUEST_SUCCESS:
       return {
         ...state,
         isFetching: false,
         userData:   action.userData,
       }
-    case 'MINE_FETCH_POSTS_FAILURE':
+    case ActionTypes.MINE_POST_REQUEST_FAILURE:
         return {
           ...state,
           error: action.error,

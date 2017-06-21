@@ -5,20 +5,22 @@ const defaultState = {
   bannerMap:        [],
 }
 
+import * as ActionTypes from '../actions/actionTypes'
+
 const financeFetchResult = (state = defaultState, action) => {
   switch (action.type) {
-    case 'FETCH_POSTS_REQUEST1':
+    case ActionTypes.FINANCE_POST_REQUEST:
       return {
         ...state,
         isFetching: true,
       }
-    case 'FETCH_POSTS_SUCCESS1':
+    case ActionTypes.FINANCE_POST_REQUEST_SUCCESS:
       return {
         ...state,
         isFetching:       false,
         investProductMap: action.investProductMap,
       }
-    case 'FETCH_POSTS_FAILURE1':
+    case ActionTypes.FINANCE_POST_REQUEST_FAILURE:
         return {
           ...state,
           error: action.error,

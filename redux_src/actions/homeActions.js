@@ -1,14 +1,16 @@
 import DataRepository from '../common/netWork'
 import RecommendModel from '../models/RecommendModel'
 
+import * as ActionTypes from '../actions/actionTypes'
+
 export const requestPosts = () =>{
 	return	{
-		type: 'FETCH_POSTS_REQUEST'
+		type: ActionTypes.HOME_POST_REQUEST
 	}
 }
 export const receivePosts = (json) =>{
 	return {
-		type:      'FETCH_POSTS_SUCCESS',
+		type:      ActionTypes.HOME_POST_REQUEST_SUCCESS,
 		bannerMap: json.result.bannerMap,
         mediaReportMap: json.result.mediaReportMap,
         recommendMap:   convertJSONToModel(json.result.recommendMap),
@@ -17,13 +19,17 @@ export const receivePosts = (json) =>{
 }
 export const errorPosts = (error) =>{
 	return {
-		type:       'FETCH_POSTS_FAILURE',
+		type:       ActionTypes.HOME_POST_REQUEST_FAILURE,
 		error:      error,
 		isFetching: false,
 	}
 }
 
-
+export const pushLogin = () =>{
+	return{
+		type: ActionTypes.PUSH_LOGIN,
+	}
+}
 const convertJSONToModel = result =>{
 
     var recommendMapTemp = []

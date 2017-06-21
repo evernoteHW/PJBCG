@@ -7,14 +7,16 @@ const defaultState = {
   recommendMap:   [], 
 }
 
+import * as ActionTypes from '../actions/actionTypes'
+
 const homeFetchResult = (state = defaultState, action) => {
   switch (action.type) {
-    case 'FETCH_POSTS_REQUEST':
+    case ActionTypes.HOME_POST_REQUEST:
       return {
         ...state,
         isFetching: true,
       }
-    case 'FETCH_POSTS_SUCCESS':
+    case ActionTypes.HOME_POST_REQUEST_SUCCESS:
       return {
         ...state,
         isFetching:     false,
@@ -23,7 +25,7 @@ const homeFetchResult = (state = defaultState, action) => {
         recommendMap:   action.recommendMap, 
         responseData:   action.response,
       }
-    case 'FETCH_POSTS_FAILURE':
+    case ActionTypes.HOME_POST_REQUEST_FAILURE:
         return {
           ...state,
           error: action.error,

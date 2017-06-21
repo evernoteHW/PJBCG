@@ -1,27 +1,29 @@
 import DataRepository from '../common/netWork'
 
+import * as ActionTypes from '../actions/actionTypes'
+
 export const requestPosts = () =>{
 	return	{
-		type: 'MINE_FETCH_POSTS_REQUEST'
+		type: ActionTypes.MINE_POST_REQUEST
 	}
 }
 export const receivePosts = json =>{
 	return {
-		type:      'MINE_FETCH_POSTS_SUCCESS',
+		type:      ActionTypes.MINE_POST_REQUEST_SUCCESS,
         userData: json.result,
 		isFetching: false,
 	}
 }
 export const errorPosts = error =>{
 	return {
-		type:       'MINE_FETCH_POSTS_FAILURE',
+		type:       ActionTypes.MINE_POST_REQUEST_FAILURE,
 		error:      error,
 		isFetching: false,
 	}
 }
 export const pushCtrl = userData =>{
 	return{
-		type: 'PushSetting',
+		type: ActionTypes.PUSH_SETTING,
 		userData
 	}
 }
