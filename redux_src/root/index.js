@@ -8,13 +8,13 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux'
 import store from '../store'
 
-import ModalApp  from './modalApp'
+import ModalAppNavigator  from './modalApp'
 
 export default class PJBCG extends Component {  
   render() {
       return (
         <Provider store={store}>
-          <ModalApp /> 
+          <ModalAppNavigator /> 
         </Provider>
       );
   }

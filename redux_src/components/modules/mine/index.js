@@ -83,6 +83,7 @@ export default class Mine extends Component {
                               style   = {styles.headerTopRight} 
                               // onPress = {() => onClick(userData)}
                               onPress = {() => mineActions.pushCtrl(userData)}
+                              // onPress = {() => onClick()}
                           >
                          <Image source = {require('../../../resources/images/mine/mine_header_top_setting.png')} style = {styles.headerTopRightIcon} /> 
                          <Text style = {styles.headerTopRightText}>账户管理</Text>

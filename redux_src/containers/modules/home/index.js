@@ -12,7 +12,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch =>{
 	return{
-		homeActions: bindActionCreators(homeActions,dispatch)
+		homeActions: bindActionCreators(homeActions,dispatch),
+		onClick: () => {
+			dispatch({type: 'Login'})
+		}
 	}
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Home)

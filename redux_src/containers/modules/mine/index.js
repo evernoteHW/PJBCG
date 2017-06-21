@@ -15,6 +15,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch,ownProps) =>{
 	return{
 		mineActions: bindActionCreators(mineActions,dispatch),
+		onClick: () => {
+			dispatch({type: 'Login'})
+		}
 	}
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Mine)
