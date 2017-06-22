@@ -57,13 +57,15 @@ export const TabBars = TabNavigator(RouteConfigs,TabNavigatorConfig)
 // }
 
 
-
+// const TabBarsContainer = (dispatch,tabBarReducer) =>{
+//      return <TabBars navigation={addNavigationHelpers({dispatch, state: tabBarReducer})}/>
+// }
 class TabBarsContainer extends Component{
-  static  navigationOptions = (navigation, navigationOptions) =>{
-    return{
-        header: null,
-    }
-  }
+  // static  navigationOptions = (navigation, navigationOptions) =>{
+  //   return{
+  //       header: null,
+  //   }
+  // }
   render(){
     const { dispatch, tabBarReducer} = this.props
     return(

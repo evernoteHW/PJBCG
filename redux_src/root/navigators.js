@@ -17,11 +17,12 @@ import { connect } from 'react-redux';
 // import PersonHomePage        from '../modules/personHomePage'
 import Login from '../components/modules/login'
 export const App = StackNavigator({
-    TabBars:             { screen: TabBarsContainer },
-    // Login:       { screen: Login },
+    TabBars:                { screen: TabBars },
+    // Login:               { screen: Login },
     // // AttentionTagPage: { screen: AttentionTagPage },
+    // 
     // ChannelManagePage:   { screen: ChannelManagePage},
-    Setting:             {screen: Setting},
+    Setting:                {screen: Setting},
     // PersonHomePage:      { screen: PersonHomePage},
 },{
     headerMode:           'screen' ,
