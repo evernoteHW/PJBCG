@@ -110,7 +110,7 @@ export default class Mine extends Component {
                 <View style = {styles.bottom}>
                     <Text style = {styles.bottomItem1}>
                         <Text style = {styles.bottomItem1LeftText}>可用余额：</Text>
-                        <Text style = {styles.bottomItem1RightText}>¥8450.00</Text>
+                        <Text style = {styles.bottomItem1RightText}>¥{userData.accountSum}</Text>
                     </Text>
                     <View style = {styles.bottomItem2}>
                         <TouchableOpacity style = {styles.bottomItem2TouchableOpacity}>
