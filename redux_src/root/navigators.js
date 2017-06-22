@@ -1,6 +1,6 @@
 import React,{ Component } from 'react'
 import { StackNavigator,addNavigationHelpers } from 'react-navigation'
-import TabBars from './tarbar'
+import TabBarsContainer,{ TabBars } from './tarbar'
 import Setting               from '../components/modules/settings'
 import { connect } from 'react-redux';
 
@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 // import PersonHomePage        from '../modules/personHomePage'
 import Login from '../components/modules/login'
 export const App = StackNavigator({
-    TabBars:             { screen: TabBars },
+    TabBars:             { screen: TabBarsContainer },
     // Login:       { screen: Login },
     // // AttentionTagPage: { screen: AttentionTagPage },
     // ChannelManagePage:   { screen: ChannelManagePage},

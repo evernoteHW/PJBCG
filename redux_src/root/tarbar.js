@@ -1,13 +1,15 @@
-import { TabNavigator } from 'react-navigation'
+import React, { Component } from 'react'
+import { TabNavigator,addNavigationHelpers } from 'react-navigation'
+import { connect } from 'react-redux'
 import Finance               from '../containers/modules/finance'
 import Home                  from '../containers/modules/home'
 import Mine                  from '../containers/modules/mine'
 
 const RouteConfigs = 
 {
-    Home: { screen: Home },
+    Home:    { screen: Home },
     Finance: { screen: Finance },
-    Mine: { screen: Mine },
+    Mine:    { screen: Mine },
 }
 
 const TabNavigatorConfig = {
@@ -43,6 +45,36 @@ const TabNavigatorConfig = {
     }
   
 };
-const TabBars = TabNavigator(RouteConfigs,TabNavigatorConfig)
-export default TabBars
+export const TabBars = TabNavigator(RouteConfigs,TabNavigatorConfig)
 
+// class AppNavigator extends Component{
+//   render(){
+//     const { dispatch, appReducer} = this.props
+//     return(
+//       <App navigation = {addNavigationHelpers({ dispatch, state: appReducer})}/>
+//     );
+//   }
+// }
+
+
+
+class TabBarsContainer extends Component{
+  static  navigationOptions = (navigation, navigationOptions) =>{
+    return{
+        header: null,
+    }
+  }
+  render(){
+    const { dispatch, tabBarReducer} = this.props
+    return(
+        <TabBars navigation={addNavigationHelpers({dispatch, state: tabBarReducer})}/>
+    );
+  }
+} 
+
+const mapStateToProps = state =>{
+  return {
+    tabBarReducer: state.tabBarReducer
+  }
+}
+export default connect(mapStateToProps)(TabBarsContainer)
