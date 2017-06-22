@@ -5,6 +5,7 @@ import mineFetchResult from './mine'
 import appReducer from './appReducer'
 import modalReducer from './modalReducer'
 import tabBarReducer from './tabBarReducer'
+import loginReducer from './loginReducer'
 
 const todoApp = combineReducers({
 	homeFetchResult,
@@ -13,6 +14,7 @@ const todoApp = combineReducers({
 	appReducer,
 	modalReducer,
 	tabBarReducer,
+	loginReducer,
 })
 
 export default todoApp

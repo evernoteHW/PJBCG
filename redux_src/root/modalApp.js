@@ -1,7 +1,7 @@
 import React,{ Component }  from 'react'
 import { StackNavigator,addNavigationHelpers } from 'react-navigation'
 import AppNavigator,{ App } from './navigators'
-import Login from '../components/modules/login'
+import Login from '../containers/modules/login'
 import { connect } from 'react-redux';
 
 export const ModalApp = StackNavigator({
