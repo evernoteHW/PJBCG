@@ -16,7 +16,7 @@ import {
   Modal,
   AsyncStorage,
   DeviceEventEmitter,
-
+  
   StatusBar,
 } from 'react-native';
 
@@ -24,14 +24,14 @@ import { NavigationActions } from 'react-navigation'
 import Login from '../login'
 import ThemeTopic from '../../../common/ThemeTopic'
 import DataRepository from '../../../common/netWork'
-
+import PasswordGesture from 'react-native-gesture-password'
 import styles from './styles'
 
 export default class Mine extends Component {
  
   static navigationOptions = ({navigation}) => {
       return {
-        headerTitle:     '账户中心 存管版',
+        headerTitle:     '账户中心',
         headerTintColor: 'white',//文字颜色
         headerStyle:     {backgroundColor: 'transparent', position: 'absolute',zIndex: 100,top: 0,left: 0,right: 0,},
         tabBarLabel: '我的',

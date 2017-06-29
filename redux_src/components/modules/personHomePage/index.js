@@ -29,7 +29,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { NavigationActions } from 'react-navigation'
 // import Login from '../login'
 // import ThemeTopic from '../../common/ThemeTopic'
-import DataRepository from '../../common/netWork'
+import DataRepository from '../../../common/netWork'
 
 export const screenWidth = Dimensions.get('window').width
 export const screenHeight = Dimensions.get('window').height
@@ -63,7 +63,7 @@ export default class PersonHomePage extends Component {
               onPress = {()=> navigation.goBack()}
           >
             <Image 
-              source = {require('../../images/common/common_return_btn_black.png')}
+              source = {require('../../../resources/images/common/common_return_btn_black.png')}
               style = {{marginLeft:10, width: 20, height:20,backgroundColor: 'transparent'}}
             />
           </TouchableOpacity>

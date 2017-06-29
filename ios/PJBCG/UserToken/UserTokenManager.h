@@ -10,6 +10,7 @@
 
 @interface UserTokenManager : NSObject
 
+@property (nonatomic, assign) BOOL isInstalled;
 @property (nonatomic, copy) NSString *loginToken;
 @property (nonatomic, copy) NSString *normalToken;
 

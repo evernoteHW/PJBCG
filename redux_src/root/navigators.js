@@ -2,6 +2,8 @@ import React,{ Component } from 'react'
 import { StackNavigator,addNavigationHelpers } from 'react-navigation'
 import TabBarsContainer,{ TabBars } from './tarbar'
 import Setting               from '../components/modules/settings'
+import PersonHomePage        from '../components/modules/personHomePage'
+
 import { connect } from 'react-redux';
 
 // import Attention             from '../modules/attention'
@@ -14,7 +16,7 @@ import { connect } from 'react-redux';
 // import Login                 from '../components/modules/login'
 // import MessageCenter         from '../modules/messageCenter'
 // import Setting               from '../components/modules/settings'
-// import PersonHomePage        from '../modules/personHomePage'
+
 import Login from '../components/modules/login'
 export const App = StackNavigator({
     TabBars:                { screen: TabBars },
@@ -23,7 +25,7 @@ export const App = StackNavigator({
     // 
     // ChannelManagePage:   { screen: ChannelManagePage},
     Setting:                {screen: Setting},
-    // PersonHomePage:      { screen: PersonHomePage},
+    PersonHomePage:      { screen: PersonHomePage},
 },{
     headerMode:           'screen' ,
     mode:                 'none',

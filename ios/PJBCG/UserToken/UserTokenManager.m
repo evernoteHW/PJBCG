@@ -9,6 +9,7 @@
 #import "UserTokenManager.h"
 
 static UserTokenManager * defaultManager = nil;
+NSString * const APP_ISINSTALLED = @"APP_ISINSTALLED";
 NSString * const USER_LOGIN_TOKEN = @"USER_LOGIN_TOKEN";
 NSString * const USER_NORMAL_TOKEN = @"USER_NORMAL_TOKEN";
 
@@ -21,7 +22,13 @@ NSString * const USER_NORMAL_TOKEN = @"USER_NORMAL_TOKEN";
   });
   return defaultManager;
 }
-
+- (BOOL)isInstalled{
+  return [[NSUserDefaults standardUserDefaults] boolForKey:APP_ISINSTALLED];
+}
+- (void)setIsInstalled:(BOOL)isInstalled{
+  [[NSUserDefaults standardUserDefaults] setBool:isInstalled forKey:APP_ISINSTALLED];
+  [[NSUserDefaults standardUserDefaults] synchronize];
+}
 - (NSString *)loginToken{
   return [[NSUserDefaults standardUserDefaults] objectForKey:USER_LOGIN_TOKEN];;
 }

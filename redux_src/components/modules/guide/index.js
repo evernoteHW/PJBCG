@@ -24,8 +24,8 @@ import {
 export const screenWidth = Dimensions.get('window').width
 export const screenHeight = Dimensions.get('window').height
 
-import NavigationBar from '../../common/NavigationBar'
-import DataRepository from '../../common/netWork'
+import NavigationBar from '../../../common/NavigationBar'
+import DataRepository from '../../../common/netWork'
 
 export default class Guide extends Component {
   constructor(props) {
@@ -75,10 +75,10 @@ export default class Guide extends Component {
           <View style = {styles.scrollViewContainer}>
           {
             [
-              {url: require('../../images/guide/01_750x1334.jpg')},
-              {url: require('../../images/guide/02_0_750x1134.jpg')},
-              {url: require('../../images/guide/02_1_7500x1334.jpg')},
-              {url: require('../../images/guide/03_750x1334.jpg')},
+              {url: require('../../../resources/images/guide/01_750x1334.jpg')},
+              {url: require('../../../resources/images/guide/02_0_750x1134.jpg')},
+              {url: require('../../../resources/images/guide/02_1_7500x1334.jpg')},
+              {url: require('../../../resources/images/guide/03_750x1334.jpg')},
             ].map((item,index) =>{
               return  <View key = {index} style = {styles.scrollViewItem}>
                         <Image source = {item.url} style = {styles.scrollViewItemImage}/>

@@ -10,6 +10,8 @@ const initialNavState = ModalApp.router.getStateForAction(
   tempNavState
 );
 
+
+
 export default modalReducer = (state = initialNavState, action) =>{
   let nextState;
   switch (action.type) {

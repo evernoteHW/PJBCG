@@ -13,8 +13,8 @@ import ModalAppNavigator  from './modalApp'
 export default class PJBCG extends Component {  
   render() {
       return (
-        <Provider store={store}>
-          <ModalAppNavigator /> 
+        <Provider store={store} >
+          <ModalAppNavigator {...this.props} /> 
         </Provider>
       );
   }
